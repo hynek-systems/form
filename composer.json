@@ -16,7 +16,8 @@
     ],
     "require": {
         "php": "^8.2",
-        "hynek/hynek-module-tools": "dev-main"
+        "hynek/hynek-module-tools": "dev-main",
+        "livewire/flux": "^2.2"
     },
     "require-dev": {
         "mockery/mockery": "^1.5",
@@ -37,7 +38,7 @@
         }
     },
     "scripts": {
-        "test": "php -d vendor/bin/pest --colors=always",
+        "test": "vendor/bin/pest --colors=always",
         "test-coverage": "@test --coverage",
         "test-dirty": "@test --dirty --compact"
     },
