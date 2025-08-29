@@ -23,4 +23,9 @@ trait HasHelpText
 
         return $this;
     }
+
+    protected function withHelpText(): array
+    {
+        return ['helpText' => $this->helpText];
+    }
 }

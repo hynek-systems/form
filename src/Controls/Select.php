@@ -39,6 +39,7 @@ class Select extends Base implements FormControl
             ...$this->withPlaceholder(),
             ...$this->withError(),
             ...$this->withValue(),
+            ...$this->withHelpText(),
             ...$this->withLivewireModel(),
             ...$this->withView(),
         ];

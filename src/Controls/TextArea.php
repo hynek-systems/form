@@ -48,6 +48,7 @@ class TextArea extends Base implements FormControl
             ...$this->withError(),
             ...$this->withValue(),
             ...$this->withRows(),
+            ...$this->withHelpText(),
             ...$this->withLivewireModel(),
             ...$this->withView(),
         ];

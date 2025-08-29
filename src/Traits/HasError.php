@@ -8,7 +8,7 @@ trait HasError
 {
     protected Error $error;
 
-    public function hookHasError()
+    public function bootHasError()
     {
         $this->error = app(Error::class);
     }

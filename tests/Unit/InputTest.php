@@ -54,3 +54,49 @@ test('that input is attached to a form', function () {
         ->assertForm(\Hynek\Form\Contracts\FormBuilder::class);
 });
 
+test('that input can be rendered to array', function () {
+    $this->input
+        ->name('username')
+        ->type('text')
+        ->id('user-id')
+        ->placeholder('Enter your username')
+        ->setValue('test-value')
+        ->label('User Name')
+        ->helpText('This is help text')
+        ->addAttribute('data-test', 'value');
+
+    $array = $this->input->toArray();
+
+    expect($array)->toBeArray()
+        ->toHaveKey('name', 'username')
+        ->toHaveKey('type', 'text')
+        ->toHaveKey('id', 'user-id')
+        ->toHaveKey('placeholder', 'Enter your username')
+        ->toHaveKey('value', 'test-value')
+        ->toHaveKey('label')
+        ->toHaveKey('helpText')
+        ->toHaveKey('_attributes');
+});
+
+// test('that input can be rendered to string', function () {
+//    $this->input
+//        ->name('username')
+//        ->type('text')
+//        ->id('user-id')
+//        ->placeholder('Enter your username')
+//        ->setValue('test-value')
+//        ->label('User Name')
+//        ->helpText('This is help text')
+//        ->addAttribute('data-test', 'value');
+//
+//    $string = $this->input->render();
+//
+//    expect($string)->toBeString()
+//        ->toContain('input')
+//        ->toContain('name="username"')
+//        ->toContain('type="text"')
+//        ->toContain('id="user-id"')
+//        ->toContain('placeholder="Enter your username"')
+//        ->toContain('value="test-value"')
+//        ->toContain('data-test="value"');
+// });

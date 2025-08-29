@@ -2,7 +2,6 @@
 
 namespace Hynek\Form\Tests;
 
-use App\Providers\AppServiceProvider;
 use Hynek\Form\FormServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
@@ -36,6 +35,6 @@ class TestCase extends Orchestra
     protected function defineDatabaseMigrations()
     {
         // Load your package migrations
-        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
     }
 }

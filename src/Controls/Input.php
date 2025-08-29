@@ -61,6 +61,7 @@ class Input extends Base implements FormControl
             ...$this->withError(),
             ...$this->withType(),
             ...$this->withValue(),
+            ...$this->withHelpText(),
             ...$this->withLivewireModel(),
             ...$this->withView(),
         ];
