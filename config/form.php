@@ -9,5 +9,7 @@ return [
     'elements_collection' => \Hynek\Form\ElementsCollection::class,
     'controls' => [
         'input' => \Hynek\Form\Controls\Input::class,
+        'textarea' => \Hynek\Form\Controls\TextArea::class,
+        'select' => \Hynek\Form\Controls\Select::class,
     ]
 ];

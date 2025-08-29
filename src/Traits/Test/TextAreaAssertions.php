@@ -2,7 +2,7 @@
 
 namespace Hynek\Form\Traits\Test;
 
-trait InputAssertions
+trait TextAreaAssertions
 {
     use AssertAttrributes,
         AssertContainer,
@@ -12,7 +12,7 @@ trait InputAssertions
         AssertLabel,
         AssertName,
         AssertPlaceholder,
+        AssertRows,
         AssertRules,
-        AssertType,
         AssertValue;
 }

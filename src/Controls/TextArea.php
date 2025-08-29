@@ -7,7 +7,7 @@ use Hynek\Form\Contracts\ElementContainer;
 use Hynek\Form\Contracts\FormControl;
 use Hynek\Form\Traits;
 
-class Input extends Base implements FormControl
+class TextArea extends Base implements FormControl
 {
     use Traits\HasAttributes,
         Traits\HasContainer,
@@ -19,33 +19,20 @@ class Input extends Base implements FormControl
         Traits\HasLivewireModel,
         Traits\HasName,
         Traits\HasPlaceholder,
+        Traits\HasRows,
         Traits\HasRules,
-        Traits\HasType,
         Traits\HasValue,
         Traits\HasView,
         Traits\Renderable,
-        Traits\Test\InputAssertions;
+        Traits\Test\TextAreaAssertions;
 
-    public static array $validTypes = [
-        'text',
-        'email',
-        'password',
-        'number',
-        'tel',
-        'url',
-        'date',
-        'datetime-local',
-        'time',
-        'color',
-        'file',
-        'checkbox',
-        'radio',
-        'hidden',
-        'search',
-        'range',
-        'month',
-        'week',
-    ];
+    public static function make(string $name): static
+    {
+        return (new static)
+            ->name($name)
+            ->id($name)
+            ->container(app(ElementContainer::class));
+    }
 
     /**
      * {@inheritDoc}
@@ -59,8 +46,8 @@ class Input extends Base implements FormControl
             ...$this->withName(),
             ...$this->withPlaceholder(),
             ...$this->withError(),
-            ...$this->withType(),
             ...$this->withValue(),
+            ...$this->withRows(),
             ...$this->withLivewireModel(),
             ...$this->withView(),
         ];

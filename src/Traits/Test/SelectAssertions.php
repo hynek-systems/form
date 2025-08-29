@@ -2,7 +2,7 @@
 
 namespace Hynek\Form\Traits\Test;
 
-trait InputAssertions
+trait SelectAssertions
 {
     use AssertAttrributes,
         AssertContainer,
@@ -11,8 +11,8 @@ trait InputAssertions
         AssertId,
         AssertLabel,
         AssertName,
+        AssertOptions,
         AssertPlaceholder,
         AssertRules,
-        AssertType,
         AssertValue;
 }

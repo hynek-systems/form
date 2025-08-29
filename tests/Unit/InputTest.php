@@ -5,7 +5,7 @@ beforeEach(function () {
 });
 
 test('that Input can be created', function () {
-    $this->assertInstanceOf(\Hynek\Form\Controls\Input::class, $this->input);
+    expect($this->input)->toBeInstanceOf(\Hynek\Form\Controls\Input::class);
 });
 
 test('that input has correct name', function () {
@@ -42,5 +42,15 @@ test('that input has correct rules', function () {
 
 test('that input has correct attributes', function () {
     $this->input->addAttribute('data-test', 'value')->assertAttributes(['data-test' => 'value']);
+});
+
+test('that input has a container', function () {
+    $this->input->container(app(\Hynek\Form\Contracts\ElementContainer::class))
+        ->assertContainer(\Hynek\Form\Contracts\ElementContainer::class);
+});
+
+test('that input is attached to a form', function () {
+    $this->input->form(app(\Hynek\Form\Contracts\FormBuilder::class))
+        ->assertForm(\Hynek\Form\Contracts\FormBuilder::class);
 });
 

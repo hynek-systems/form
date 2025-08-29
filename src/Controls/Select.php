@@ -3,11 +3,10 @@
 namespace Hynek\Form\Controls;
 
 use Hynek\Form\Base;
-use Hynek\Form\Contracts\ElementContainer;
 use Hynek\Form\Contracts\FormControl;
 use Hynek\Form\Traits;
 
-class Input extends Base implements FormControl
+class Select extends Base implements FormControl
 {
     use Traits\HasAttributes,
         Traits\HasContainer,
@@ -18,37 +17,16 @@ class Input extends Base implements FormControl
         Traits\HasLabel,
         Traits\HasLivewireModel,
         Traits\HasName,
+        Traits\HasOptions,
         Traits\HasPlaceholder,
         Traits\HasRules,
-        Traits\HasType,
         Traits\HasValue,
         Traits\HasView,
         Traits\Renderable,
-        Traits\Test\InputAssertions;
-
-    public static array $validTypes = [
-        'text',
-        'email',
-        'password',
-        'number',
-        'tel',
-        'url',
-        'date',
-        'datetime-local',
-        'time',
-        'color',
-        'file',
-        'checkbox',
-        'radio',
-        'hidden',
-        'search',
-        'range',
-        'month',
-        'week',
-    ];
+        Traits\Test\SelectAssertions;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function toArray()
     {
@@ -57,9 +35,9 @@ class Input extends Base implements FormControl
             ...$this->withId(),
             ...$this->withLabel(),
             ...$this->withName(),
+            ...$this->withOptions(),
             ...$this->withPlaceholder(),
             ...$this->withError(),
-            ...$this->withType(),
             ...$this->withValue(),
             ...$this->withLivewireModel(),
             ...$this->withView(),
