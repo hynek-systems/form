@@ -5,6 +5,7 @@ namespace Hynek\Form;
 class Error extends Base implements Contracts\Error
 {
     use Traits\HasAttributes,
+        Traits\HasName,
         Traits\HasText,
         Traits\HasView,
         Traits\Renderable;
@@ -13,6 +14,7 @@ class Error extends Base implements Contracts\Error
     {
         return [
             ...$this->withAttributes(),
+            ...$this->withName(),
             ...$this->withText(),
             ...$this->withView(),
         ];

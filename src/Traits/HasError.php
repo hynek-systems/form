@@ -15,7 +15,7 @@ trait HasError
 
     public function errorMessage(string $text, ?array $attributes = null): static
     {
-        $this->error->text($text);
+        $this->error->name($this->getName())->text($text);
 
         if ($attributes) {
             $this->error->addAttribute($attributes);

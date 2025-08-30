@@ -43,7 +43,7 @@ class ElementsCollection extends Collection implements Contracts\ElementsCollect
      */
     public function render(): string
     {
-        return $this->map(fn (FormElement $element) => method_exists($element, 'render') ? $element->render() : '')->implode("\n");
+        return $this->map(fn (FormElement $element) => method_exists($element, 'getContainer') ? $element->getContainer()->render() : $element->render())->implode("\n");
     }
 
     /**

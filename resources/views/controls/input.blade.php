@@ -12,7 +12,7 @@
 ])
 @php
     $attributes = $attributes->merge([
-        ...$_attributes->toArray(),
+        ...$_attributes,
         'data-name' => $name,
     ]);
 @endphp

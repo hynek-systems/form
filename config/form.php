@@ -22,5 +22,6 @@ return [
         'select' => 'form::controls.select',
         'label' => 'form::label',
         'help_text' => 'form::help-text',
+        'error' => 'form::error',
     ],
 ];

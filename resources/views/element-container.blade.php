@@ -7,7 +7,7 @@
 ])
 @php
     $attributes = $attributes->merge([
-        ...$_attributes->toArray(),
+        ...$_attributes,
         'id' => $id,
         'data-name' => $name,
     ]);

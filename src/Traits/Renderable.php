@@ -8,7 +8,7 @@ trait Renderable
     {
         return view(
             $this->toArray()['view'],
-            collect($this->toArray())->except(['view'])->toArray()
+            $this->toArray()
         )->render();
     }
 }

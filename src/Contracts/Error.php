@@ -29,6 +29,19 @@ interface Error extends Arrayable
     public function text(string $text): static;
 
     /**
+     * Set the name of the element.
+     * @param  string  $name
+     * @return $this
+     */
+    public function name(string $name): static;
+
+    /**
+     * Get the name of the element.
+     * @return string|null
+     */
+    public function getName(): ?string;
+
+    /**
      * Set a custom view for rendering the error message.
      * @param  string  $view
      * @return $this

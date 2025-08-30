@@ -12,7 +12,8 @@ class FormServiceProvider extends HynekModuleToolsServiceProvider
     public function configurePackage(Package $package): void
     {
         $package->name('hynek-form')
-            ->hasConfigFile();
+            ->hasConfigFile()
+            ->hasViews();
     }
 
     public function packageBooted()
@@ -24,9 +25,18 @@ class FormServiceProvider extends HynekModuleToolsServiceProvider
             fn () => app(config('form.default_element_container'))->view(config('form.views.element_container'))
         );
         $this->app->bind(Contracts\FormBuilder::class, config('form.default_form_builder'));
-        $this->app->bind(Contracts\Label::class, config('form.default_label'));
-        $this->app->bind(Contracts\HelpText::class, config('form.default_help_text'));
-        $this->app->bind(Contracts\Error::class, config('form.default_error'));
+        $this->app->bind(
+            Contracts\Label::class,
+            fn () => app(config('form.default_label'))->view(config('form.views.label'))
+        );
+        $this->app->bind(
+            Contracts\HelpText::class,
+            fn () => app(config('form.default_help_text'))->view(config('form.views.help_text'))
+        );
+        $this->app->bind(
+            Contracts\Error::class,
+            fn () => app(config('form.default_error'))->view(config('form.views.error'))
+        );
         $this->app->bind(Contracts\ElementsCollection::class, config('form.elements_collection'));
 
         foreach (config('form.controls') as $key => $control) {
