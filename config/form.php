@@ -13,6 +13,7 @@ return [
         'input' => \Hynek\Form\Controls\Input::class,
         'textarea' => \Hynek\Form\Controls\TextArea::class,
         'select' => \Hynek\Form\Controls\Select::class,
+        'button' => \Hynek\Form\Controls\Button::class,
     ],
     'views' => [
         'form_container' => 'form::form-container',
@@ -20,6 +21,7 @@ return [
         'input' => 'form::controls.input',
         'textarea' => 'form::controls.textarea',
         'select' => 'form::controls.select',
+        'button' => 'form::controls.button',
         'label' => 'form::label',
         'help_text' => 'form::help-text',
         'error' => 'form::error',
