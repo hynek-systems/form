@@ -15,6 +15,10 @@ trait HasContainer
 
     public function container(ElementContainer $container): static
     {
+        if (method_exists($this, 'settingCotainer')) {
+            $this->settingContainer($container);
+        }
+
         $this->container = $container->element($this);
 
         return $this;

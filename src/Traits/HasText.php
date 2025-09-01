@@ -13,6 +13,11 @@ trait HasText
         return $this;
     }
 
+    public function getText(): string
+    {
+        return $this->text;
+    }
+
     protected function withText(): array
     {
         return ['text' => $this->text];

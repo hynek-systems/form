@@ -4,7 +4,9 @@ namespace Hynek\Form\Controls;
 
 use Hynek\Form\Base;
 use Hynek\Form\Traits\HasAttributes;
+use Hynek\Form\Traits\HasContainer;
 use Hynek\Form\Traits\HasIcon;
+use Hynek\Form\Traits\HasId;
 use Hynek\Form\Traits\HasKeyboardShortcut;
 use Hynek\Form\Traits\HasLoading;
 use Hynek\Form\Traits\HasSizes;
@@ -20,7 +22,9 @@ class Button extends Base implements \Hynek\Form\Contracts\Button
 {
     use ButtonAssertions,
         HasAttributes,
+        HasContainer,
         HasIcon,
+        HasId,
         HasKeyboardShortcut,
         HasLoading,
         HasSizes,
@@ -64,6 +68,7 @@ class Button extends Base implements \Hynek\Form\Contracts\Button
         return [
             ...$this->withAttributes(),
             ...$this->withIcon(),
+            ...$this->withId(),
             ...$this->withKbd(),
             ...$this->withLoading(),
             ...$this->withSize(),

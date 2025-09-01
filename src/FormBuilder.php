@@ -11,6 +11,7 @@ class FormBuilder extends Base implements Contracts\FormBuilder
         Traits\HasId,
         Traits\HasName,
         Traits\HasView,
+        Traits\ManagesButtons,
         Traits\ManagesElements,
         Traits\Renderable;
 

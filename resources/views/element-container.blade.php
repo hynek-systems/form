@@ -4,6 +4,7 @@
     'label' => null,
     'name' => null,
     'element' => null,
+    'variant' => 'block',
 ])
 @php
     $attributes = $attributes->merge([
@@ -12,7 +13,7 @@
         'data-name' => $name,
     ]);
 @endphp
-<flux:field {{$attributes}}>
+<flux:field :$variant {{$attributes}}>
     @if !blank($label)
         {!! $label->render() !!}
     @endif

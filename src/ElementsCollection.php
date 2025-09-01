@@ -25,7 +25,7 @@ class ElementsCollection extends Collection implements Contracts\ElementsCollect
      */
     public function getElement(string $elementName): ?FormElement
     {
-        return $this->firstWhere('name', $elementName);
+        return $this->get($elementName);
     }
 
     /**

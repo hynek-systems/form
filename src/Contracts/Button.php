@@ -4,23 +4,8 @@ namespace Hynek\Form\Contracts;
 
 use Illuminate\Contracts\Support\Arrayable;
 
-interface Button extends Arrayable
+interface Button extends FormElement
 {
-    /**
-     * Add HTML attributes to the element.
-     * @param  string|array  $name
-     * @param  string|null  $value
-     * @return $this
-     */
-    public function addAttribute(string|array $name, ?string $value = null): static;
-
-    /**
-     * Remove an HTML attribute from the element.
-     * @param  string  $name
-     * @return $this
-     */
-    public function removeAttribute(string $name): static;
-
     /**
      * The HTML type attribute of the button. Options: button (default), submit.
      * @param  string  $type
@@ -101,15 +86,8 @@ interface Button extends Arrayable
     public function text(string $text): static;
 
     /**
-     * Set a custom view for rendering the button.
-     * @param  string  $view
-     * @return $this
+     * Get the text of the button.
+     * @return string|null
      */
-    public function view(string $view): static;
-
-    /**
-     * Render the button as an HTML string.
-     * @return string
-     */
-    public function render(): string;
+    public function getText(): string;
 }

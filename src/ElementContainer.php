@@ -12,8 +12,16 @@ class ElementContainer extends Base implements Contracts\ElementContainer
         Traits\HasId,
         Traits\HasLabel,
         Traits\HasName,
+        Traits\HasVariants,
         Traits\HasView,
         Traits\Renderable;
+
+    public function boot()
+    {
+        parent::boot();
+
+        $this->variant = 'block';
+    }
 
     /**
      * {@inheritDoc}
@@ -26,6 +34,7 @@ class ElementContainer extends Base implements Contracts\ElementContainer
             ...$this->withLabel(),
             ...$this->withName(),
             ...$this->withElement(),
+            ...$this->withVariant(),
             ...$this->withView(),
         ];
     }

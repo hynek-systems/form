@@ -77,4 +77,8 @@ interface FormBuilder extends Arrayable
     public function getElements(): ElementsCollection;
 
     public function getRules(): Collection;
+
+    public function button(string $text, ?string $type = 'button'): static;
+
+    public function getButtons(): ButtonsCollection;
 }

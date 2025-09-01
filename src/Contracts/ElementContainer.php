@@ -68,4 +68,6 @@ interface ElementContainer extends Arrayable
      * @return string
      */
     public function render(): string;
+
+    public function variant(string $variant): static;
 }

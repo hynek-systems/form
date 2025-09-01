@@ -38,7 +38,7 @@ abstract class Form extends Base implements Contracts\Form
 
     protected function buildElement(string $name, array $field): FormElement
     {
-        $element = app($field['type']);
+        $element = app('form.control'.$field['element']);
         $element->name($name);
 
         foreach ($field as $prop) {

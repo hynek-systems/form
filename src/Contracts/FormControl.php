@@ -7,19 +7,42 @@ use Illuminate\Support\Collection;
 interface FormControl extends FormElement
 {
     /**
+     * Set the container for the element.
+     * @param  ElementContainer  $container
+     * @return $this
+     */
+    public function container(ElementContainer $container): static;
+
+    /**
+     * Get the container of the element.
+     * @return ElementContainer
+     */
+    public function getContainer(): ElementContainer;
+
+    /**
+     * Set the name of the element.
+     * @param  string  $name
+     * @return $this
+     */
+    public function name(string $name): static;
+
+    /**
+     * Get the name of the element.
+     * @return string|null
+     */
+    public function getName(): ?string;
+
+    public function form(FormBuilder $builder): static;
+
+    public function getForm(): FormBuilder;
+
+    /**
      * Set the label for the form control.
      * @param  string  $text
      * @param  array|null  $attributes
      * @return $this
      */
     public function label(string $text, ?array $attributes = null): static;
-
-    /**
-     * Set the placeholder for the form control.
-     * @param  string  $placeholder
-     * @return $this
-     */
-    public function placeholder(string $placeholder): static;
 
     /**
      * Set the help text for the form control.

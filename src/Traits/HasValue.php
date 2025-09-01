@@ -20,6 +20,6 @@ trait HasValue
 
     protected function withValue(): array
     {
-        return ['value' => $this->getValue()];
+        return ['value' => $this->value];
     }
 }

@@ -22,20 +22,6 @@ interface FormElement extends Arrayable
     public function removeAttribute(string $name): static;
 
     /**
-     * Set the container for the element.
-     * @param  ElementContainer  $container
-     * @return $this
-     */
-    public function container(ElementContainer $container): static;
-
-    /**
-     * Set the name of the element.
-     * @param  string  $name
-     * @return $this
-     */
-    public function name(string $name): static;
-
-    /**
      * Set the id of the element.
      * @param string $id
      * @return $this
@@ -50,24 +36,8 @@ interface FormElement extends Arrayable
     public function view(string $view): static;
 
     /**
-     * Get the name of the element.
-     * @return string|null
-     */
-    public function getName(): ?string;
-
-    /**
-     * Get the container of the element.
-     * @return ElementContainer
-     */
-    public function getContainer(): ElementContainer;
-
-    /**
      * Render the element as an HTML string.
      * @return string
      */
     public function render(): string;
-
-    public function form(FormBuilder $builder): static;
-
-    public function getForm(): FormBuilder;
 }
