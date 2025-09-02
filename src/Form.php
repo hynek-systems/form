@@ -5,13 +5,16 @@ namespace Hynek\Form;
 use Hynek\Form\Contracts\FormBuilder;
 use Hynek\Form\Contracts\FormElement;
 use Hynek\Form\Traits\AjaxSubmission;
+use Hynek\Form\Traits\HasView;
+use Hynek\Form\Traits\Renderable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 
 abstract class Form extends Base implements Contracts\Form
 {
-    use AjaxSubmission;
-    
+    use AjaxSubmission,
+        HasView;
+
     protected Collection $fields;
 
     protected FormBuilder $builder;
@@ -66,7 +69,7 @@ abstract class Form extends Base implements Contracts\Form
     {
         $this->resolveFields();
 
-        return $this->builder->render();
+        return $this->builder->view($this->view)->render();
     }
 
     public function validate(): array

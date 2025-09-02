@@ -27,4 +27,9 @@ trait ManagesElements
     {
         return $this->elements;
     }
+
+    protected function withElements(): array
+    {
+        return ['elements' => $this->elements];
+    }
 }

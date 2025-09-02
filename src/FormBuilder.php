@@ -10,6 +10,7 @@ class FormBuilder extends Base implements Contracts\FormBuilder
         Traits\HasAttributes,
         Traits\HasContainer,
         Traits\HasId,
+        Traits\HasLivewireSubmit,
         Traits\HasName,
         Traits\HasView,
         Traits\ManagesButtons,
@@ -41,12 +42,14 @@ class FormBuilder extends Base implements Contracts\FormBuilder
     {
         return [
             ...$this->withAttributes(),
+            ...$this->withButtons(),
+            ...$this->withElements(),
             ...$this->withId(),
+            ...$this->withLivewireSubmit(),
             ...$this->withName(),
             ...$this->withView(),
             'action' => $this->action,
             'method' => $this->method,
-            'elements' => $this->elements,
         ];
     }
 

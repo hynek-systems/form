@@ -20,6 +20,7 @@ return [
         'button' => \Hynek\Form\Controls\Button::class,
     ],
     'views' => [
+        'form' => 'form::form',
         'form_container' => 'form::form-container',
         'element_container' => 'form::element-container',
         'input' => 'form::controls.input',

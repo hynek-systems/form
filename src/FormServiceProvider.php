@@ -19,8 +19,14 @@ class FormServiceProvider extends HynekModuleToolsServiceProvider
 
     public function packageBooted()
     {
-        $this->app->bind(Contracts\Form::class, config('form.form_class'));
-        $this->app->bind(FormContainer::class, config('form.default_form_container'));
+        $this->app->bind(
+            Contracts\Form::class,
+            fn () => app(config('form.form_class'))->view(config('form.views.form'))
+        );
+        $this->app->bind(
+            FormContainer::class,
+            fn () => app(config('form.default_form_container'))->view(config('form.views.form_container'))
+        );
         $this->app->bind(
             Contracts\ElementContainer::class,
             fn () => app(config('form.default_element_container'))->view(config('form.views.element_container'))

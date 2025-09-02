@@ -28,4 +28,9 @@ trait ManagesButtons
     {
         return $this->buttons;
     }
+
+    protected function withButtons(): array
+    {
+        return ['buttons' => $this->buttons];
+    }
 }
