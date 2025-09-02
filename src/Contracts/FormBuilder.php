@@ -62,12 +62,6 @@ interface FormBuilder extends Arrayable
      */
     public function getContainer(): ?ElementContainer;
 
-    /**
-     * Render the form element as an HTML string.
-     * @return string
-     */
-    public function render(): string;
-
     public function action(string $action): static;
 
     public function method(string $method): static;
@@ -81,4 +75,16 @@ interface FormBuilder extends Arrayable
     public function button(string $text, ?string $type = 'button'): static;
 
     public function getButtons(): ButtonsCollection;
+
+    /**
+     * Enable form submission over AJAX/XHR
+     * @return $this
+     */
+    public function enableAjax(): static;
+
+    /**
+     * Disable form submission over AJAX/XHR
+     * @return $this
+     */
+    public function disableAjax(): static;
 }

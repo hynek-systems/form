@@ -6,14 +6,14 @@ use Illuminate\Support\Collection;
 
 class FormBuilder extends Base implements Contracts\FormBuilder
 {
-    use Traits\HasAttributes,
+    use Traits\AjaxSubmission,
+        Traits\HasAttributes,
         Traits\HasContainer,
         Traits\HasId,
         Traits\HasName,
         Traits\HasView,
         Traits\ManagesButtons,
-        Traits\ManagesElements,
-        Traits\Renderable;
+        Traits\ManagesElements;
 
     protected string $action;
 

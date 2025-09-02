@@ -13,4 +13,16 @@ interface Form
     public function getBuilder(): FormBuilder;
 
     public function extendFields(array $fields): static;
+
+    /**
+     * Enable form submission over AJAX/XHR
+     * @return $this
+     */
+    public function enableAjax(): static;
+
+    /**
+     * Disable form submission over AJAX/XHR
+     * @return $this
+     */
+    public function disableAjax(): static;
 }

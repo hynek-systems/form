@@ -3,6 +3,7 @@
 namespace Hynek\Form;
 
 use Hynek\Form\Traits\HasAttributes;
+use Hynek\Form\Traits\HasElement;
 use Hynek\Form\Traits\HasId;
 use Hynek\Form\Traits\HasName;
 use Hynek\Form\Traits\HasView;
@@ -12,6 +13,7 @@ use Illuminate\Contracts\Support\Arrayable;
 class FormContainer extends Base implements Arrayable
 {
     use HasAttributes,
+        HasElement,
         HasName,
         HasId,
         HasView,
@@ -21,6 +23,7 @@ class FormContainer extends Base implements Arrayable
     {
         return [
             ...$this->withAttributes(),
+            ...$this->withElement(),
             ...$this->withName(),
             ...$this->withId(),
             ...$this->withView(),

@@ -8,7 +8,7 @@ export default defineConfig({
             name: "Hynek/Form",
             fileName: (format) => `hynek-form.${format}.js`,
         },
-        outDir: "dist",
+        outDir: "resources/dist",
         emptyOutDir: true,
     },
 })

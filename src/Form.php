@@ -4,11 +4,14 @@ namespace Hynek\Form;
 
 use Hynek\Form\Contracts\FormBuilder;
 use Hynek\Form\Contracts\FormElement;
+use Hynek\Form\Traits\AjaxSubmission;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 
 abstract class Form extends Base implements Contracts\Form
 {
+    use AjaxSubmission;
+    
     protected Collection $fields;
 
     protected FormBuilder $builder;
