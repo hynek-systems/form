@@ -2,12 +2,10 @@
 
 namespace Hynek\Form\Controls;
 
-use Hynek\Form\Base;
 use Hynek\Form\Contracts\ElementContainer;
-use Hynek\Form\Contracts\FormControl;
 use Hynek\Form\Traits;
 
-class TextArea extends Base implements FormControl
+class TextArea extends FormControl
 {
     use Traits\HasAttributes,
         Traits\HasContainer,

@@ -1,7 +1,7 @@
 <?php
 
 beforeEach(function () {
-    $this->textarea = app('form.control.textarea');
+    $this->textarea = app('form.control.textarea', ['name' => 'my-textarea']);
 });
 
 test('that textarea can be created', function () {

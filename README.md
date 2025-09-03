@@ -421,14 +421,16 @@ You can create your own custom form controls by extending the `Hynek\Form\Contro
 // app/Forms/Controls/MyCustomControl.php
 namespace App\Forms\Controls;
 
-use Hynek\Form\Controls\Control;
+use Hynek\Form\Controls\FormControl;
+use Hynek\Form\Traits\Renderable;
 
-class MyCustomControl extends Control
+class MyCustomControl extends FormControl
 {
-    // Implement rendering logic, attributes, etc.
-    public function render()
+    use Renderable;
+    
+    public function toArray()
     {
-        return view('my-theme.controls.custom', ['control' => $this]);
+        return [];
     }
 }
 ```

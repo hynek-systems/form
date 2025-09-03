@@ -49,7 +49,7 @@ class FormServiceProvider extends HynekModuleToolsServiceProvider
         foreach (config('form.controls') as $key => $control) {
             $this->app->bind(
                 "form.control.{$key}",
-                fn () => app($control)->view(config('form.views.'.$key))
+                fn ($_, $params) => app($control, $params)->view(config('form.views.'.$key))
             );
         }
 

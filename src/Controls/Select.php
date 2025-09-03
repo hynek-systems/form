@@ -2,11 +2,9 @@
 
 namespace Hynek\Form\Controls;
 
-use Hynek\Form\Base;
-use Hynek\Form\Contracts\FormControl;
 use Hynek\Form\Traits;
 
-class Select extends Base implements FormControl
+class Select extends FormControl
 {
     use Traits\HasAttributes,
         Traits\HasContainer,

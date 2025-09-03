@@ -1,7 +1,7 @@
 <?php
 
 beforeEach(function () {
-    $this->select = app('form.control.select');
+    $this->select = app('form.control.select', ['name' => 'my-select']);
 });
 
 test('that select can be created', function () {

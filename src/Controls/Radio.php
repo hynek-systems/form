@@ -19,7 +19,7 @@ use Hynek\Form\Traits\HasValue;
 use Hynek\Form\Traits\HasView;
 use Hynek\Form\Traits\Renderable;
 
-class Radio extends Base implements \Hynek\Form\Contracts\Radio
+class Radio extends FormControl implements \Hynek\Form\Contracts\Radio
 {
     use Checkable,
         HasAttributes,

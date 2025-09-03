@@ -37,9 +37,9 @@ test('that form builder can manage buttons', function () {
 
 test('that form builder can manage elements', function () {
     $this->formBuilder
-        ->element(app('form.control.input')->name('input'))
-        ->element(app('form.control.select')->name('select'))
-        ->element(app('form.control.textarea')->name('textarea'));
+        ->element(app('form.control.input', ['name' => 'input']))
+        ->element(app('form.control.select', ['name' => 'select']))
+        ->element(app('form.control.textarea', ['name' => 'textarea']));
 
     expect($this->formBuilder->getElements())
         ->toBeInstanceOf(\Hynek\Form\Contracts\ElementsCollection::class)

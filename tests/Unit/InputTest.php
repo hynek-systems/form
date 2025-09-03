@@ -1,7 +1,7 @@
 <?php
 
 beforeEach(function () {
-    $this->input = app('form.control.input');
+    $this->input = app('form.control.input', ['name' => 'my-input']);
 });
 
 test('that Input can be created', function () {
