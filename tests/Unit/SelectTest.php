@@ -41,8 +41,8 @@ test('that select has correct attributes', function () {
 });
 
 test('that select has a container', function () {
-    $this->select->container(app(\Hynek\Form\Contracts\ElementContainer::class))
-        ->assertContainer(\Hynek\Form\Contracts\ElementContainer::class);
+    $this->select->container(app(\Hynek\Form\Contracts\ControlContainer::class))
+        ->assertContainer(\Hynek\Form\Contracts\ControlContainer::class);
 });
 
 test('that select is attached to a form', function () {

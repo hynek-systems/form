@@ -45,8 +45,8 @@ test('that input has correct attributes', function () {
 });
 
 test('that input has a container', function () {
-    $this->input->container(app(\Hynek\Form\Contracts\ElementContainer::class))
-        ->assertContainer(\Hynek\Form\Contracts\ElementContainer::class);
+    $this->input->container(app(\Hynek\Form\Contracts\ControlContainer::class))
+        ->assertContainer(\Hynek\Form\Contracts\ControlContainer::class);
 });
 
 test('that input is attached to a form', function () {

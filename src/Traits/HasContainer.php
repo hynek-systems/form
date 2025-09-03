@@ -2,6 +2,7 @@
 
 namespace Hynek\Form\Traits;
 
+use Hynek\Form\Contracts\ControlContainer;
 use Hynek\Form\Contracts\ElementContainer;
 
 trait HasContainer
@@ -10,7 +11,7 @@ trait HasContainer
 
     public function bootHasContainer()
     {
-        $this->container = app(ElementContainer::class);
+        $this->container = app(ControlContainer::class);
     }
 
     public function container(ElementContainer $container): static

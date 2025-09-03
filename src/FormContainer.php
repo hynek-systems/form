@@ -8,9 +8,8 @@ use Hynek\Form\Traits\HasId;
 use Hynek\Form\Traits\HasName;
 use Hynek\Form\Traits\HasView;
 use Hynek\Form\Traits\Renderable;
-use Illuminate\Contracts\Support\Arrayable;
 
-class FormContainer extends Base implements Arrayable
+class FormContainer extends Base implements \Hynek\Form\Contracts\ElementContainer
 {
     use HasAttributes,
         HasElement,

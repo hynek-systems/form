@@ -28,8 +28,8 @@ class FormServiceProvider extends HynekModuleToolsServiceProvider
             fn () => app(config('form.default_form_container'))->view(config('form.views.form_container'))
         );
         $this->app->bind(
-            Contracts\ElementContainer::class,
-            fn () => app(config('form.default_element_container'))->view(config('form.views.element_container'))
+            Contracts\ControlContainer::class,
+            fn () => app(config('form.default_control_container'))->view(config('form.views.control_container'))
         );
         $this->app->bind(Contracts\FormBuilder::class, config('form.default_form_builder'));
         $this->app->bind(

@@ -5,7 +5,7 @@ namespace Hynek\Form;
 use Hynek\Form\Contracts\FormElement;
 use Hynek\Form\Contracts\Label;
 
-class ElementContainer extends Base implements Contracts\ElementContainer
+class ControlContainer extends Base implements Contracts\ControlContainer
 {
     use Traits\HasAttributes,
         Traits\HasElement,

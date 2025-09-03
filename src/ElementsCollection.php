@@ -2,14 +2,15 @@
 
 namespace Hynek\Form;
 
+use Hynek\Form\Contracts\FormControl;
 use Hynek\Form\Contracts\FormElement;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class ElementsCollection extends Collection implements Contracts\ElementsCollection
 {
-
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function remove(string $elementName): FormElement
     {
@@ -21,7 +22,7 @@ class ElementsCollection extends Collection implements Contracts\ElementsCollect
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getElement(string $elementName): ?FormElement
     {
@@ -29,7 +30,7 @@ class ElementsCollection extends Collection implements Contracts\ElementsCollect
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getFormValues(): mixed
     {
@@ -39,7 +40,7 @@ class ElementsCollection extends Collection implements Contracts\ElementsCollect
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function render(): string
     {
@@ -47,7 +48,7 @@ class ElementsCollection extends Collection implements Contracts\ElementsCollect
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getRules(): Collection
     {
@@ -61,5 +62,20 @@ class ElementsCollection extends Collection implements Contracts\ElementsCollect
         $this->put($element->getName(), $element);
 
         return $this;
+    }
+
+    public function updateValue(string $elementName, mixed $value): static
+    {
+        return $this->each(function (FormElement $element, string $key) use ($elementName, $value) {
+            if ($key === $elementName || $key === Str::dotToArraySyntax($elementName)) {
+                if ($element instanceof FormControl) {
+                    $element->setValue($value);
+                } elseif (method_exists($element, 'getElement')) {
+                    $element->getElement()->setValue($value);
+                } elseif (method_exists($element, 'getElements')) {
+                    $element->getElements()->updateValue($elementName, $value);
+                }
+            }
+        });
     }
 }

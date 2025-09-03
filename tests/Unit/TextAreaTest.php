@@ -41,8 +41,8 @@ test('that textarea has correct attributes', function () {
 });
 
 test('that textarea has a container', function () {
-    $this->textarea->container(app(\Hynek\Form\Contracts\ElementContainer::class))
-        ->assertContainer(\Hynek\Form\Contracts\ElementContainer::class);
+    $this->textarea->container(app(\Hynek\Form\Contracts\ControlContainer::class))
+        ->assertContainer(\Hynek\Form\Contracts\ControlContainer::class);
 });
 
 test('that textarea is attached to a form', function () {

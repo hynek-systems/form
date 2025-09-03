@@ -16,7 +16,7 @@ trait ManagesButtons
     public function button(string $text, ?string $type = 'button'): static
     {
         $this->buttons->addButton(
-            app(config('form.control.button'))
+            app(config('form.controls.button'))
                 ->text($text)
                 ->type($type)
         );

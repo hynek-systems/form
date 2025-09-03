@@ -44,4 +44,6 @@ interface ElementsCollection
      * @return Collection
      */
     public function getRules(): Collection;
+
+    public function updateValue(string $elementName, mixed $value): static;
 }

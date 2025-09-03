@@ -69,7 +69,7 @@ abstract class Form extends Base implements Contracts\Form
     {
         $this->resolveFields();
 
-        return $this->builder->view($this->view)->render();
+        return $this->builder->view($this->view, ['elements' => $this->fields])->render();
     }
 
     public function validate(): array

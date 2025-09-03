@@ -3,7 +3,7 @@
 return [
     'form_class' => \Hynek\Form\Form::class,
     'default_form_container' => \Hynek\Form\FormContainer::class,
-    'default_element_container' => \Hynek\Form\ElementContainer::class,
+    'default_control_container' => \Hynek\Form\ControlContainer::class,
     'default_form_builder' => \Hynek\Form\FormBuilder::class,
     'default_label' => \Hynek\Form\Label::class,
     'default_help_text' => \Hynek\Form\HelpText::class,
@@ -22,12 +22,12 @@ return [
     'views' => [
         'form' => 'form::form',
         'form_container' => 'form::form-container',
-        'element_container' => 'form::element-container',
+        'control_container' => 'form::control-container',
         'input' => 'form::controls.input',
         'textarea' => 'form::controls.textarea',
         'select' => 'form::controls.select',
         'checkbox' => 'form::controls.checkbox',
-        'checkboxgroup' => 'form::controls.checkbox.group',
+        'checkbox-group' => 'form::controls.checkbox.group',
         'radio' => 'form::controls.radio',
         'button' => 'form::controls.button',
         'label' => 'form::label',

@@ -28,6 +28,13 @@ trait ManagesElements
         return $this->elements;
     }
 
+    public function updateValue($elementName, $value): static
+    {
+        $this->elements->updateValue($elementName, $value);
+
+        return $this;
+    }
+
     protected function withElements(): array
     {
         return ['elements' => $this->elements];

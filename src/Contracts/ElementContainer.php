@@ -3,7 +3,6 @@
 namespace Hynek\Form\Contracts;
 
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Support\HtmlString;
 
 interface ElementContainer extends Arrayable
 {
@@ -21,13 +20,6 @@ interface ElementContainer extends Arrayable
      * @return $this
      */
     public function removeAttribute(string $name): static;
-
-    /**
-     * Set the label for the container.
-     * @param  Label  $label
-     * @return $this
-     */
-    public function label(string $text, ?array $attributes = null): static;
 
     /**
      * Set the element of the container.
@@ -68,6 +60,4 @@ interface ElementContainer extends Arrayable
      * @return string
      */
     public function render(): string;
-
-    public function variant(string $variant): static;
 }

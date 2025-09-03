@@ -89,4 +89,6 @@ interface FormBuilder extends Arrayable
     public function disableAjax(): static;
 
     public function livewireSubmit(string $livewireSubmit): static;
+
+    public function updateValue($elementName, $value): static;
 }

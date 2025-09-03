@@ -8,13 +8,20 @@ class FormBuilder extends Base implements Contracts\FormBuilder
 {
     use Traits\AjaxSubmission,
         Traits\HasAttributes,
+        /**
+         * @deprecated
+         */
         Traits\HasContainer,
         Traits\HasId,
         Traits\HasLivewireSubmit,
         Traits\HasName,
+        /**
+         * @deprecated
+         */
         Traits\HasView,
         Traits\ManagesButtons,
-        Traits\ManagesElements;
+        Traits\ManagesElements,
+        Traits\Test\FormBuilderAssertions;
 
     protected string $action;
 
