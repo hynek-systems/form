@@ -9,14 +9,12 @@
 @php
     $attributes = $attributes->merge($_attributes)
 @endphp
-<flux:checkbox.group @if(!blank($livewireModel)) wire:model="{{ $livewireModel }}"@endif :label="$label && !$check_all ? $label->toArray()['text'] : null" :$attributes>
+<flux:checkbox.group @if(!blank($livewireModel)) wire:model="{{ $livewireModel }}" @endif :label="$label && !$check_all ? $label->toArray()['text'] : null" :$attributes>
     @if($check_all)
         <flux:checkbox.all :$label />
     @endif
     @if(!blank($helpText))
         {!! $helpText->render() !!}
     @endif
-    @foreach($checkboxes as $checkbox)
-        {!! $checkbox->getContainer()->render() !!}
-    @endforeach
+        {!! $checkbox->render() !!}
 </flux:checkbox.group>

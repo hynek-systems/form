@@ -29,6 +29,7 @@ return [
         'checkbox' => 'form::controls.checkbox',
         'checkbox-group' => 'form::controls.checkbox.group',
         'radio' => 'form::controls.radio',
+        'radio-group' => 'form::controls.radio.group',
         'button' => 'form::controls.button',
         'label' => 'form::label',
         'help_text' => 'form::help-text',
