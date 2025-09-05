@@ -38,6 +38,13 @@
             "Hynek\\Form\\Tests\\": "tests"
         }
     },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Hynek\\Form\\FormServiceProvider"
+            ]
+        }
+    },
     "scripts": {
         "test": "vendor/bin/pest --colors=always",
         "test-coverage": "@test --coverage",
