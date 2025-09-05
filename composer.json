@@ -49,15 +49,6 @@
             "pestphp/pest-plugin": true
         }
     },
-    "repositories": [
-        {
-            "type": "path",
-            "url": "../hynek-module-tools",
-            "options": {
-                "symlink": true
-            }
-        }
-    ],
     "minimum-stability": "dev",
     "prefer-stable": true
 }
