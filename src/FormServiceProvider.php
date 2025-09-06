@@ -4,8 +4,6 @@ namespace Hynek\Form;
 
 use Hynek\HynekModuleTools\HynekModuleToolsServiceProvider;
 use Hynek\HynekModuleTools\Package;
-use Illuminate\Support\Str;
-use Illuminate\Support\Stringable;
 
 class FormServiceProvider extends HynekModuleToolsServiceProvider
 {
@@ -52,28 +50,5 @@ class FormServiceProvider extends HynekModuleToolsServiceProvider
                 fn ($_, $params) => app($control, $params)->view(config('form.views.'.$key))
             );
         }
-
-        Str::macro('dotToArraySyntax', function (string $key): string {
-            $parts = explode('.', $key);
-            $first = array_shift($parts);
-
-            return $first.implode('', array_map(fn ($part) => "[$part]", $parts));
-        });
-
-        Str::macro('arraySyntaxToDot', function (string $key): string {
-            // replace brackets with dots
-            $key = preg_replace('/\[(.*?)\]/', '.$1', $key);
-
-            // remove accidental leading dot
-            return ltrim($key, '.');
-        });
-
-        Stringable::macro('arraySyntaxToString', function (string $key): string {
-            return Str::arraySyntaxToDot($this->value);
-        });
-
-        Stringable::macro('arraySyntaxToDot', function () {
-            return Str::arraySyntaxToDot($this->value);
-        });
     }
 }

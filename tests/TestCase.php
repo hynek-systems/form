@@ -3,6 +3,7 @@
 namespace Hynek\Form\Tests;
 
 use Hynek\Form\FormServiceProvider;
+use Hynek\Macro\MacroServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
@@ -17,6 +18,7 @@ class TestCase extends Orchestra
     protected function getPackageProviders($app)
     {
         return [
+            MacroServiceProvider::class,
             FormServiceProvider::class,
         ];
     }
