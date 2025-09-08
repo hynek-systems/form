@@ -16,6 +16,7 @@
     ])
 @endphp
 <form @if(!blank($livewireSubmit)) wire:submit="{{$livewireSubmit}}" @else :method="$method" :action="$action" @endif :name="$name" {{ $attributes }}>
+    @csrf
     {!! $elements->render() !!}
     {!! $buttons->render() !!}
 </form>
