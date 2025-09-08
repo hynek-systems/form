@@ -79,8 +79,6 @@ abstract class Form extends Base implements Contracts\Form
 
     abstract public function fields(): array;
 
-    abstract public function rules(): array;
-
     public function render(): string
     {
         $this->resolveFields();
