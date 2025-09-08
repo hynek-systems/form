@@ -13,4 +13,6 @@ interface Form
     public function getBuilder(): FormBuilder;
 
     public function extendFields(array $fields): static;
+
+    public function fill(array $data): static;
 }

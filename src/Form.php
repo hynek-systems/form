@@ -6,7 +6,7 @@ use Hynek\Form\Contracts\FormBuilder;
 use Hynek\Form\Contracts\FormElement;
 use Hynek\Form\Traits\AjaxSubmission;
 use Hynek\Form\Traits\HasView;
-use Hynek\Form\Traits\Renderable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 
@@ -18,6 +18,22 @@ abstract class Form extends Base implements Contracts\Form
     protected Collection $fields;
 
     protected FormBuilder $builder;
+
+    public static function fromData(\Spatie\LaravelData\Data $data): static
+    {
+        $form = new static;
+        $form->fill($data->toArray());
+
+        return $form;
+    }
+
+    public static function fromModel(Model $model): static
+    {
+        $form = new static();
+        $form->fill($model->getAttributes());
+
+        return $form;
+    }
 
     public function __construct()
     {
@@ -87,6 +103,19 @@ abstract class Form extends Base implements Contracts\Form
     public function extendFields(array $fields): static
     {
         $this->fields = $this->fields->merge($fields);
+
+        return $this;
+    }
+
+    public function fill(array $data): static
+    {
+        foreach ($data as $key => $value) {
+            if (! array_key_exists($key, $this->fields)) {
+                continue;
+            }
+
+            data_set($this->fields, "$key.value", $value);
+        }
 
         return $this;
     }
