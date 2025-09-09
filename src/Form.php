@@ -9,6 +9,8 @@ use Hynek\Form\Traits\HasView;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Spatie\LaravelData\Data;
 
 abstract class Form extends Base implements Contracts\Form
 {
@@ -19,7 +21,7 @@ abstract class Form extends Base implements Contracts\Form
 
     protected FormBuilder $builder;
 
-    public static function fromData(\Spatie\LaravelData\Data $data): static
+    public static function fromData(Data $data): static
     {
         $form = new static;
         $form->fill($data->toArray());
@@ -79,11 +81,32 @@ abstract class Form extends Base implements Contracts\Form
 
     abstract public function fields(): array;
 
+    /**
+     * @throws \Throwable
+     */
     public function render(): string
     {
         $this->resolveFields();
+        $action = $this->action();
+        $method = $this->method();
+        $livewireSubmit = $this->livewireSubmit();
 
-        return $this->builder->view($this->view, ['elements' => $this->fields])->render();
+        if ($this->useHtmx()) {
+            $attribute = 'hx-'.Str::lower($method);
+            $this->builder->addAttribute($attribute, $action);
+        } else {
+            $this->builder->action($action);
+            $this->builder->method($method);
+        }
+
+        if (! blank($livewireSubmit)) {
+            $this->builder->livewireSubmit($livewireSubmit);
+        }
+
+        return view(
+            $this->view,
+            $this->builder->toArray()
+        )->render();
     }
 
     public function validate(): array
@@ -117,4 +140,15 @@ abstract class Form extends Base implements Contracts\Form
 
         return $this;
     }
+
+    public function livewireSubmit(): string
+    {
+        return '';
+    }
+
+    abstract public function action(): string;
+
+    abstract public function method(): string;
+
+    abstract public function useHtmx(): bool;
 }

@@ -1,4 +1,6 @@
-class FormStatus {
+window.Hynek ??= {}
+
+window.Hynek.FormStatus = class {
     constructor(form) {
         this.form = form
         this.fields = {}

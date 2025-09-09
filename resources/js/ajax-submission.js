@@ -1,10 +1,10 @@
-import FormStatus from "./formstatus.js";
+import "./formstatus.js";
 
-class AjaxSubmission {
+window.Hynek.AjaxSubmission = class {
     constructor(form, options = {}) {
         this.form = form;
         this.options = options;
-        this.formState = new FormStatus(form)
+        this.formState = new Hynek.FormStatus(form)
 
         this.init();
     }

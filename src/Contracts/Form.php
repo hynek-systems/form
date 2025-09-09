@@ -15,4 +15,12 @@ interface Form
     public function extendFields(array $fields): static;
 
     public function fill(array $data): static;
+
+    public function livewireSubmit(): string;
+
+    public function action(): string;
+
+    public function method(): string;
+
+    public function useHtmx(): bool;
 }
