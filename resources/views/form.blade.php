@@ -12,11 +12,14 @@
     $attributes = $attributes->merge([
         ...$_attributes,
         'id' => $id,
-        'name' => $name
-    ])
+        'name' => $name,
+    ])->class('space-y-6');
+    $usesHtmx = $attributes->has('hx-post') || $attributes->has('hx-get') || $attributes->has('hx-put') || $attributes->has('hx-patch') || $attributes->has('hx-delete');
 @endphp
-<form @if(!blank($livewireSubmit)) wire:submit="{{$livewireSubmit}}" @else :method="$method" :action="$action" @endif :name="$name" {{ $attributes }}>
-    @csrf
-    {!! $elements->render() !!}
-    {!! $buttons->render() !!}
-</form>
+<x-dynamic-component :component="\Hynek\Core\View\Layouts::DEFAULT_ADMIN_LAYOUT->value">
+    <form @if(!blank($livewireSubmit)) wire:submit="{{$livewireSubmit}}" @elseif(!$usesHtmx) method="{{ $method }}" action="{{ $action }}" @endif {{ $attributes }}>
+        @csrf
+        {!! $elements->render() !!}
+        {!! $buttons->render() !!}
+    </form>
+</x-dynamic-component>

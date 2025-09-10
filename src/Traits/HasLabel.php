@@ -11,7 +11,8 @@ trait HasLabel
     public function label(string $text, ?array $attributes = null): static
     {
         $this->label = app(Label::class)
-            ->text($text);
+            ->text($text)
+            ->htmlFor($this->name);
 
         if ($attributes) {
             $this->label->addAttribute($attributes);

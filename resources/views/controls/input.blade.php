@@ -15,18 +15,24 @@
         ...$_attributes,
         'data-name' => $name,
     ]);
+
+    if (!blank($livewireModel)) {
+        $attributes = $_attributes->merge(['wire:model' => $livewireModel]);
+    }
 @endphp
-<?php
-if (!is_null($label)) {
-  $label->render();
-}
-?>
-<flux:input :$id :$attributes :$name :$type :$placeholder @if (!blank($livewireModel)) wire:model="{{ $livewireModel }}"@endif />
-<?php
-if (!is_null($helpText)) {
-  $helpText->render();
-}
-if (!is_null($error)) {
-  $error->render();
-}
-?>
+<div class="space-y-6">
+    @php
+    if (!is_null($label)) {
+        echo $label->render();
+    }
+    @endphp
+    <flux:input :$id :$attributes :$name :$type :$placeholder />
+    @php
+    if (!is_null($helpText)) {
+      echo $helpText->render();
+    }
+    if (!is_null($error)) {
+      echo $error->render();
+    }
+    @endphp
+</div>

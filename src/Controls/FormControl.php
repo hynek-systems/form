@@ -3,9 +3,7 @@
 namespace Hynek\Form\Controls;
 
 use Hynek\Form\Base;
-use Hynek\Form\Contracts\ElementContainer;
-use Hynek\Form\Contracts\FormBuilder;
-use Illuminate\Support\Collection;
+use Hynek\Form\Contracts\ControlContainer;
 
 abstract class FormControl extends Base implements \Hynek\Form\Contracts\FormControl
 {
@@ -13,5 +11,6 @@ abstract class FormControl extends Base implements \Hynek\Form\Contracts\FormCon
     {
         parent::__construct();
         $this->name($name);
+        $this->container(app(ControlContainer::class));
     }
 }

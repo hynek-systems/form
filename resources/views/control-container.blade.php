@@ -14,7 +14,7 @@
     ]);
 @endphp
 <flux:field :$variant {{$attributes}}>
-    @if !blank($label)
+    @if(!blank($label))
         {!! $label->render() !!}
     @endif
 
