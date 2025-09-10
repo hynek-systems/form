@@ -112,6 +112,7 @@ abstract class Form extends Base implements Contracts\Form
         $livewireSubmit = $this->livewireSubmit();
         $this->builder->action($this->action);
         $this->builder->method($this->method->value);
+        $this->builder->title($this->title());
 
         if ($this->useHtmx()) {
             $attribute = 'hx-'.Str::lower($this->method->value);

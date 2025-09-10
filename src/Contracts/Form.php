@@ -28,4 +28,6 @@ interface Form
     public function method(?FormMethods $method = null): FormMethods;
 
     public function useHtmx(): bool;
+
+    public function title(): ?string;
 }

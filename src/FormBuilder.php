@@ -27,6 +27,8 @@ class FormBuilder extends Base implements Contracts\FormBuilder
 
     protected string $method;
 
+    protected ?string $title = null;
+
     public static function make(string $name, string $action, ?string $method = null): static
     {
         $builder = (new static)
@@ -57,6 +59,7 @@ class FormBuilder extends Base implements Contracts\FormBuilder
             ...$this->withView(),
             'action' => $this->action,
             'method' => $this->method,
+            'title' => $this->title,
         ];
     }
 
@@ -77,5 +80,12 @@ class FormBuilder extends Base implements Contracts\FormBuilder
     public function getRules(): Collection
     {
         return $this->elements->getRules();
+    }
+
+    public function title(string $title): static
+    {
+        $this->title = $title;
+
+        return $this;
     }
 }

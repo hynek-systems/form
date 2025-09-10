@@ -91,4 +91,6 @@ interface FormBuilder extends Arrayable
     public function livewireSubmit(string $livewireSubmit): static;
 
     public function updateValue($elementName, $value): static;
+
+    public function title(string $title): static;
 }

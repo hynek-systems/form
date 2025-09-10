@@ -11,7 +11,7 @@
         ...$_attributes,
         'id' => $id,
         'data-name' => $name,
-    ]);
+    ])->class('col-span-1');
 @endphp
 <flux:field :$variant {{$attributes}}>
     @if(!blank($label))
