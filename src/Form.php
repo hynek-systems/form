@@ -4,8 +4,10 @@ namespace Hynek\Form;
 
 use Hynek\Form\Contracts\FormBuilder;
 use Hynek\Form\Contracts\FormElement;
+use Hynek\Form\Enums\FormMethods;
 use Hynek\Form\Traits\AjaxSubmission;
 use Hynek\Form\Traits\HasView;
+use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
@@ -20,6 +22,10 @@ abstract class Form extends Base implements Contracts\Form
     protected Collection $fields;
 
     protected FormBuilder $builder;
+
+    protected FormMethods $method;
+
+    protected string $action;
 
     public static function fromData(Data $data): static
     {
@@ -44,6 +50,8 @@ abstract class Form extends Base implements Contracts\Form
         $this->fields = collect($this->fields());
         $this->builder = app(FormBuilder::class);
     }
+
+    abstract protected function bootForm(): void;
 
     protected function resolveFields()
     {
@@ -84,19 +92,17 @@ abstract class Form extends Base implements Contracts\Form
     /**
      * @throws \Throwable
      */
-    public function render(): string
+    public function render(): View
     {
         $this->resolveFields();
-        $action = $this->action();
-        $method = $this->method();
         $livewireSubmit = $this->livewireSubmit();
 
         if ($this->useHtmx()) {
-            $attribute = 'hx-'.Str::lower($method);
-            $this->builder->addAttribute($attribute, $action);
+            $attribute = 'hx-'.Str::lower($this->method->value);
+            $this->builder->addAttribute($attribute, $this->action);
         } else {
-            $this->builder->action($action);
-            $this->builder->method($method);
+            $this->builder->action($this->action);
+            $this->builder->method($this->method->value);
         }
 
         if (! blank($livewireSubmit)) {
@@ -106,7 +112,7 @@ abstract class Form extends Base implements Contracts\Form
         return view(
             $this->view,
             $this->builder->toArray()
-        )->render();
+        );
     }
 
     public function validate(): array
@@ -146,9 +152,26 @@ abstract class Form extends Base implements Contracts\Form
         return '';
     }
 
-    abstract public function action(): string;
+    public function action(?string $action = null): string
+    {
+        if (! is_null($action)) {
+            $this->action = $action;
+        }
 
-    abstract public function method(): string;
+        return $this->action;
+    }
 
-    abstract public function useHtmx(): bool;
+    public function method(?FormMethods $method = null): FormMethods
+    {
+        if (! is_null($method)) {
+            $this->method = $method;
+        }
+
+        return $this->method;
+    }
+
+    public function useHtmx(): bool
+    {
+        return false;
+    }
 }

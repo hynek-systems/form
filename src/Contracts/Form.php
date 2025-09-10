@@ -2,11 +2,14 @@
 
 namespace Hynek\Form\Contracts;
 
+use Hynek\Form\Enums\FormMethods;
+use Illuminate\Contracts\View\View;
+
 interface Form
 {
     public function fields(): array;
 
-    public function render(): string;
+    public function render(): View;
 
     public function validate(): array;
 
@@ -18,9 +21,9 @@ interface Form
 
     public function livewireSubmit(): string;
 
-    public function action(): string;
+    public function action(?string $action = null): string;
 
-    public function method(): string;
+    public function method(?FormMethods $method = null): FormMethods;
 
     public function useHtmx(): bool;
 }
