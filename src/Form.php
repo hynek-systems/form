@@ -50,6 +50,7 @@ abstract class Form extends Base implements Contracts\Form
         $this->fields = collect($this->fields());
         $this->builder = app(FormBuilder::class);
         $this->bootForm();
+        $this->view('form::form');
     }
 
     abstract protected function bootForm(): void;
