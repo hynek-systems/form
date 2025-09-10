@@ -49,6 +49,7 @@ abstract class Form extends Base implements Contracts\Form
 
         $this->fields = collect($this->fields());
         $this->builder = app(FormBuilder::class);
+        $this->bootForm();
     }
 
     abstract protected function bootForm(): void;
@@ -58,10 +59,10 @@ abstract class Form extends Base implements Contracts\Form
         foreach ($this->fields as $name => $field) {
             if (is_array($field)) {
                 $element = $this->buildElement($name, $field);
-                $this->builder->addElement($element);
+                $this->builder->element($element);
             } elseif ($field instanceof FormElement) {
                 $field->name($name);
-                $this->builder->addElement($field);
+                $this->builder->element($field);
             } else {
                 throw new \InvalidArgumentException("Field {$name} must be an array or instance of ".FormElement::class);
             }
@@ -70,15 +71,18 @@ abstract class Form extends Base implements Contracts\Form
 
     protected function buildElement(string $name, array $field): FormElement
     {
-        $element = app('form.control'.$field['element']);
-        $element->name($name);
+        $element = app('form.control.'.$field['element'], ['name' => $name]);
 
-        foreach ($field as $prop) {
+        foreach ($field as $prop => $value) {
+            if ($prop === 'element') {
+                continue;
+            }
+
             $setMethod = 'set'.ucfirst($prop);
             if (method_exists($this, $setMethod)) {
-                $element->$setMethod($field[$prop]);
+                $element->$setMethod($value);
             } elseif (method_exists($element, $prop)) {
-                $element->$prop($field[$prop]);
+                $element->$prop($value);
             } else {
                 throw new \InvalidArgumentException("Method {$prop} does not exist on ".get_class($element));
             }
@@ -96,13 +100,12 @@ abstract class Form extends Base implements Contracts\Form
     {
         $this->resolveFields();
         $livewireSubmit = $this->livewireSubmit();
+        $this->builder->action($this->action);
+        $this->builder->method($this->method->value);
 
         if ($this->useHtmx()) {
             $attribute = 'hx-'.Str::lower($this->method->value);
             $this->builder->addAttribute($attribute, $this->action);
-        } else {
-            $this->builder->action($this->action);
-            $this->builder->method($this->method->value);
         }
 
         if (! blank($livewireSubmit)) {
