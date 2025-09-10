@@ -9,6 +9,8 @@ interface Form
 {
     public function fields(): array;
 
+    public function buttons(): array;
+
     public function render(): View;
 
     public function validate(): array;

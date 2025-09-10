@@ -18,7 +18,7 @@
 @endphp
 <?php
 if (!is_null($label)) {
-    $label->render();
+    echo $label->render();
 }
 ?>
 <flux:select :$id :$name :$placeholder :$attributes @if (!blank($livewireModel)) wire:model="{{ $attributes }}"@endif>
@@ -30,10 +30,10 @@ if (!is_null($label)) {
 </flux:select>
 <?php
 if (!is_null($helpText)) {
-    $helpText->render();
+    echo $helpText->render();
 }
 
 if (!is_null($error)) {
-    $error->render();
+    echo $error->render();
 }
 ?>

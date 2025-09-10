@@ -21,6 +21,8 @@ abstract class Form extends Base implements Contracts\Form
 
     protected Collection $fields;
 
+    protected Collection $buttons;
+
     protected FormBuilder $builder;
 
     protected FormMethods $method;
@@ -48,6 +50,7 @@ abstract class Form extends Base implements Contracts\Form
         parent::__construct();
 
         $this->fields = collect($this->fields());
+        $this->buttons = collect($this->buttons());
         $this->builder = app(FormBuilder::class);
         $this->bootForm();
         $this->view('form::form');
@@ -68,6 +71,13 @@ abstract class Form extends Base implements Contracts\Form
                 throw new \InvalidArgumentException("Field {$name} must be an array or instance of ".FormElement::class);
             }
         }
+    }
+
+    protected function resolveButtons()
+    {
+        $this->buttons->each(function ($item) {
+            $this->builder->button($item['text'], $item['type']);
+        });
     }
 
     protected function buildElement(string $name, array $field): FormElement
@@ -92,14 +102,13 @@ abstract class Form extends Base implements Contracts\Form
         return $element;
     }
 
-    abstract public function fields(): array;
-
     /**
      * @throws \Throwable
      */
     public function render(): View
     {
         $this->resolveFields();
+        $this->resolveButtons();
         $livewireSubmit = $this->livewireSubmit();
         $this->builder->action($this->action);
         $this->builder->method($this->method->value);
