@@ -1,0 +1,29 @@
+<?php
+
+namespace {{NAMESPACE}};
+
+use Hynek\Form\Form;
+
+class {{CLASS}} extends Form
+{
+
+    public function fields(): array
+    {
+        // TODO: Implement fields() method.
+    }
+
+    public function buttons(): array
+    {
+        // TODO: Implement buttons() method.
+    }
+
+    public function title(): ?string
+    {
+        // TODO: Implement title() method.
+    }
+
+    protected function bootForm(): void
+    {
+        // TODO: Implement bootForm() method.
+    }
+}
