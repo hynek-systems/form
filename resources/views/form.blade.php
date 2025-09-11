@@ -14,7 +14,7 @@
         ...$_attributes,
         'id' => $id,
         'name' => $name,
-    ])->class('space-y-6 grid gap-10 grid-cols-1 md:grid-cols-2');
+    ])->class('grid gap-10 grid-cols-1 md:grid-cols-2');
     $usesHtmx = $attributes->has('hx-post') || $attributes->has('hx-get') || $attributes->has('hx-put') || $attributes->has('hx-patch') || $attributes->has('hx-delete');
 @endphp
 <x-dynamic-component :component="\Hynek\Core\View\Layouts::DEFAULT_ADMIN_LAYOUT->value">
@@ -24,7 +24,7 @@
     <form @if(!blank($livewireSubmit)) wire:submit="{{$livewireSubmit}}" @elseif(!$usesHtmx) method="{{ $method }}" action="{{ $action }}" @endif {{ $attributes }}>
         @csrf
         {!! $elements->render() !!}
-        <div class="col-span-1-over--1">
+        <div class="col-start-1 col-end-[-1]">
             {!! $buttons->render() !!}
         </div>
     </form>
