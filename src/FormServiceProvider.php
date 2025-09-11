@@ -2,6 +2,7 @@
 
 namespace Hynek\Form;
 
+use Hynek\Form\Commands\MakeFormCommand;
 use Hynek\HynekModuleTools\HynekModuleToolsServiceProvider;
 use Hynek\HynekModuleTools\Package;
 
@@ -12,7 +13,10 @@ class FormServiceProvider extends HynekModuleToolsServiceProvider
         $package->name('hynek-form')
             ->hasConfigFile()
             ->hasViews()
-            ->hasAssets();
+            ->hasAssets()
+            ->hasCommands(
+                MakeFormCommand::class
+            );
     }
 
     public function packageBooted()
