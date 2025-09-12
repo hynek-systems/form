@@ -8,6 +8,7 @@
     'method' => null,
     'name' => null,
     'title' => null,
+    'layout' => null,
 ])
 @php
     $attributes = $attributes->merge([
@@ -17,7 +18,7 @@
     ])->class('grid gap-10 grid-cols-1 md:grid-cols-2');
     $usesHtmx = $attributes->has('hx-post') || $attributes->has('hx-get') || $attributes->has('hx-put') || $attributes->has('hx-patch') || $attributes->has('hx-delete');
 @endphp
-<x-dynamic-component :component="\Hynek\Core\View\Layouts::DEFAULT_ADMIN_LAYOUT->value">
+<x-dynamic-component :component="$layout ?? 'layouts.blank'">
     @if(!blank($title))
         <flux:heading level="1" size="xl" class="pb-4 mb-6 border-b border-solid border-zinc-700">{{ $title }}</flux:heading>
     @endif

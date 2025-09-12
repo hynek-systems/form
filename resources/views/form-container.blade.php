@@ -10,6 +10,4 @@
         'id' => $id
     ])
 @endphp
-<div {{ $attributes }}>
     {!! $element->render() !!}
-</div>

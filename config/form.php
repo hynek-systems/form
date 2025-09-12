@@ -141,4 +141,17 @@ return [
         'help_text' => 'form::help-text',
         'error' => 'form::error',
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Auto Register Forms
+    |--------------------------------------------------------------------------
+    |
+    | Add directories here that should be scanned for form classes.
+    | Both application and package developers can add to this array.
+    |
+    */
+    'auto_register_forms' => [
+        app_path('Forms'),
+    ],
 ];

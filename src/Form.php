@@ -2,6 +2,7 @@
 
 namespace Hynek\Form;
 
+use Hynek\Core\Traits\HasAttributes;
 use Hynek\Form\Contracts\FormBuilder;
 use Hynek\Form\Contracts\FormElement;
 use Hynek\Form\Enums\FormMethods;
@@ -17,6 +18,7 @@ use Spatie\LaravelData\Data;
 abstract class Form extends Base implements Contracts\Form
 {
     use AjaxSubmission,
+        HasAttributes,
         HasView;
 
     protected Collection $fields;
@@ -125,7 +127,10 @@ abstract class Form extends Base implements Contracts\Form
 
         return view(
             $this->view,
-            $this->builder->toArray()
+            [
+                ...$this->builder->toArray(),
+                'layout' => $this->getAttribute('layout'),
+            ]
         );
     }
 
