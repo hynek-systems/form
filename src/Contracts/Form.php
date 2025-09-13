@@ -13,6 +13,8 @@ interface Form
 
     public function render(): View;
 
+    public function renderFragment(string $fragment, ?array $data = []): string;
+
     public function validate(): array;
 
     public function getBuilder(): FormBuilder;
@@ -32,4 +34,8 @@ interface Form
     public function title(): ?string;
 
     public function addAttribute(string|array $name, ?string $value = null): static;
+
+    public function getName(): string;
+
+    public function getView();
 }

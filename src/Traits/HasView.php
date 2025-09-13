@@ -19,6 +19,11 @@ trait HasView
         return $this;
     }
 
+    public function getView(): string
+    {
+        return $this->view;
+    }
+
     protected function withView(): array
     {
         return ['view' => $this->view];

@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Mauricius\LaravelHtmx\View\BladeFragment;
 use Spatie\LaravelData\Data;
 
 abstract class Form extends Base implements Contracts\Form
@@ -109,17 +110,14 @@ abstract class Form extends Base implements Contracts\Form
         return $element;
     }
 
-    /**
-     * @throws \Throwable
-     */
-    public function render(): View
+    protected function beforeRender()
     {
         $this->resolveFields();
         $this->resolveButtons();
-        $livewireSubmit = $this->livewireSubmit();
         $this->builder->action($this->action);
         $this->builder->method($this->method->value);
         $this->builder->title($this->title());
+        $livewireSubmit = $this->livewireSubmit();
 
         if ($this->useHtmx()) {
             $attribute = 'hx-'.Str::lower($this->method->value);
@@ -129,12 +127,39 @@ abstract class Form extends Base implements Contracts\Form
         if (! blank($livewireSubmit)) {
             $this->builder->livewireSubmit($livewireSubmit);
         }
+    }
+
+    protected function viewData(): array
+    {
+        return [
+            ...$this->builder->toArray(),
+            ...$this->getAllAttributes(),
+        ];
+    }
+
+    /**
+     * @throws \Throwable
+     */
+    public function render(): View
+    {
+        $this->beforeRender();
 
         return view(
             $this->view,
+            $this->viewData()
+        );
+    }
+
+    public function renderFragment(string $fragment, ?array $data = []): string
+    {
+        $this->beforeRender();
+
+        return BladeFragment::render(
+            $this->view,
+            $fragment,
             [
-                ...$this->builder->toArray(),
-                ...$this->getAllAttributes(),
+                ...$this->viewData(),
+                ...$data
             ]
         );
     }
@@ -204,5 +229,15 @@ abstract class Form extends Base implements Contracts\Form
         $this->builder->addAttribute($name, $value);
 
         return $this;
+    }
+
+    public function getName(): string
+    {
+        return $this->builder->getName();
+    }
+
+    public function getView(): string
+    {
+        return $this->builder->getView();
     }
 }

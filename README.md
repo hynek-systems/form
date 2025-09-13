@@ -1,464 +1,506 @@
-# Laravel Form Package
+# Hynek Form Package
 
-This package provides a robust and flexible way to build and render forms in your Laravel applications. It offers a clear, object-oriented approach to defining your form structures, controls, and presentation.
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/hynek/hynek-form.svg?style=flat-square)](https://packagist.org/packages/hynek/hynek-form)
+[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/henyk/hynek-form/run-tests?label=tests)](https://github.com/henyk/hynek-form/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/henyk/hynek-form/Check%20&%20fix%20styling?label=code%20style)](https://github.com/henyk/hynek-form/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amain)
+[![Total Downloads](https://img.shields.io/packagist/dt/hynek/hynek-form.svg?style=flat-square)](https://packagist.org/packages/hynek/hynek-form)
 
-## Installation
+**Hynek Form** is a modern, feature-rich Laravel package for building dynamic, interactive forms with built-in support for **HTMX**, **Livewire**, **Spatie Laravel Data**, and seamless **validation**. Create beautiful, type-safe forms with minimal boilerplate code.
 
-You can install the package via Composer:
+## ✨ Key Features
+
+- 🎯 **Declarative Form Classes** - Define forms as PHP classes with clear, intuitive syntax
+- ⚡ **HTMX Integration** - Built-in support for partial form updates and real-time validation
+- 🔄 **Livewire Compatible** - Seamless integration with Livewire components
+- 📝 **Spatie Laravel Data** - Type-safe form handling with automatic validation
+- 🎨 **Customizable Views** - Fully customizable Blade templates with sensible defaults
+- 🛡️ **Enhanced Form Requests** - Extended Laravel Form Requests with HTMX support
+- 🏗️ **Extensible Architecture** - Easy to extend with custom controls and containers
+- 📱 **Responsive Design** - Mobile-first approach with modern UI patterns
+
+## 🚀 Installation
+
+Install the package via Composer:
 
 ```bash
-composer require hynek/form
+composer require hynek/hynek-form
 ```
 
-After installing, publish the package's configuration file and views (optional) using:
+Publish the configuration file and views (optional):
 
 ```bash
 php artisan vendor:publish --provider="Hynek\Form\FormServiceProvider"
 ```
 
-This will publish `config/form.php` and `resources/views/vendor/form` to your application.
+This publishes:
+- `config/form.php` - Configuration file
+- `resources/views/vendor/form/` - Blade templates
 
-## Configuration
+## 🎯 Quick Start
 
-The package's configuration file, `config/form.php`, allows you to customize the default classes and views used for various form components.
+### 1. Generate a Form Class
 
-Here's a breakdown of the available configuration options:
+```bash
+php artisan make:form ContactForm
+```
 
-```php
-// config/form.php
+### 2. Define Your Form
+
+```php path=/app/Forms/ContactForm.php start=1
+<?php
+
+namespace App\Forms;
+
+use Hynek\Form\Enums\FormMethods;
+use Hynek\Form\Form;
+
+class ContactForm extends Form
+{
+    public function fields(): array
+    {
+        return [
+            'name' => [
+                'element' => 'input',
+                'label' => 'Full Name',
+                'placeholder' => 'Enter your full name',
+                'rules' => ['required', 'string', 'max:255'],
+            ],
+            'email' => [
+                'element' => 'input',
+                'type' => 'email',
+                'label' => 'Email Address', 
+                'placeholder' => 'your@email.com',
+                'rules' => ['required', 'email'],
+            ],
+            'message' => [
+                'element' => 'textarea',
+                'label' => 'Message',
+                'placeholder' => 'Your message here...',
+                'rows' => 4,
+                'rules' => ['required', 'string'],
+            ],
+        ];
+    }
+
+    public function buttons(): array
+    {
+        return [
+            ['text' => 'Send Message', 'type' => 'submit'],
+            ['text' => 'Reset', 'type' => 'reset'],
+        ];
+    }
+
+    public function title(): ?string
+    {
+        return 'Contact Us';
+    }
+
+    protected function bootForm(): void
+    {
+        $this->action(route('contact.store'))
+            ->method(FormMethods::POST)
+            ->addAttribute('class', 'space-y-6');
+    }
+}
+```
+
+### 3. Use in Controller
+
+```php path=/app/Http/Controllers/ContactController.php start=1
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Forms\ContactForm;
+use Illuminate\Http\Request;
+
+class ContactController extends Controller
+{
+    public function create()
+    {
+        $form = new ContactForm();
+        
+        return view('contact.create', compact('form'));
+    }
+    
+    public function store(Request $request)
+    {
+        $form = new ContactForm();
+        $validatedData = $form->validate();
+        
+        // Process the form data...
+        
+        return redirect()->back()->with('success', 'Message sent!');
+    }
+}
+```
+
+### 4. Render in Blade
+
+```blade path=/resources/views/contact/create.blade.php start=1
+@extends('layouts.app')
+
+@section('content')
+<div class="max-w-2xl mx-auto py-8">
+    {{ $form }}
+</div>
+@endsection
+```
+
+## 🔥 Advanced Features
+
+### HTMX Integration
+
+Enable HTMX for real-time form validation and partial updates:
+
+```php path=null start=null
+class ContactForm extends Form
+{
+    public function useHtmx(): bool
+    {
+        return true;
+    }
+    
+    protected function bootForm(): void
+    {
+        $this->action(route('contact.store'))
+            ->method(FormMethods::POST);
+    }
+}
+```
+
+### Enhanced Form Requests
+
+Use the enhanced `FormRequest` class for automatic HTMX validation responses:
+
+```php path=/app/Http/Requests/ContactRequest.php start=1
+<?php
+
+namespace App\Http\Requests;
+
+use App\Forms\ContactForm;
+use Hynek\Form\FormRequest;
+
+class ContactRequest extends FormRequest
+{
+    protected ContactForm $form;
+    
+    public function __construct()
+    {
+        parent::__construct();
+        $this->form = new ContactForm();
+    }
+    
+    public function rules()
+    {
+        return $this->form->getBuilder()->getRules()->toArray();
+    }
+    
+    public function authorize()
+    {
+        return true;
+    }
+}
+```
+
+### Livewire Integration
+
+Create reactive forms with Livewire:
+
+```php path=/app/Livewire/ContactForm.php start=1
+<?php
+
+namespace App\Livewire;
+
+use Hynek\Form\Livewire\Form;
+
+class ContactForm extends Form
+{
+    public function fields(): array
+    {
+        return [
+            'name' => [
+                'element' => 'input',
+                'label' => 'Name',
+                'rules' => ['required'],
+            ],
+            'email' => [
+                'element' => 'input',
+                'type' => 'email', 
+                'label' => 'Email',
+                'rules' => ['required', 'email'],
+            ],
+        ];
+    }
+    
+    public function submit()
+    {
+        $this->validate();
+        
+        // Process form...
+        
+        session()->flash('message', 'Form submitted successfully!');
+    }
+}
+```
+
+### Spatie Laravel Data Integration
+
+Create type-safe forms with automatic validation:
+
+```php path=/app/Data/ContactData.php start=1
+<?php
+
+namespace App\Data;
+
+use Spatie\LaravelData\Data;
+use Spatie\LaravelData\Attributes\Validation\Required;
+use Spatie\LaravelData\Attributes\Validation\Email;
+
+class ContactData extends Data
+{
+    public function __construct(
+        #[Required]
+        public string $name,
+        
+        #[Required, Email]
+        public string $email,
+        
+        #[Required] 
+        public string $message,
+    ) {}
+}
+```
+
+```php path=/app/Forms/ContactForm.php start=35
+use App\Data\ContactData;
+use Spatie\LaravelData\Data;
+
+class ContactForm extends Form
+{
+    public static function fromData(Data $data): static
+    {
+        return parent::fromData($data);
+    }
+    
+    public function toData(): ContactData
+    {
+        $values = $this->getBuilder()->getElements()->getFormValues();
+        return ContactData::from($values);
+    }
+}
+```
+
+### Model Binding
+
+Prefill forms from Eloquent models:
+
+```php path=null start=null
+use App\Models\User;
+
+public function edit(User $user)
+{
+    $form = ContactForm::fromModel($user);
+    
+    return view('contact.edit', compact('form'));
+}
+```
+
+## 🎨 Available Form Controls
+
+### Input Types
+```php path=null start=null
+'email' => [
+    'element' => 'input',
+    'type' => 'email',
+    'label' => 'Email',
+    'placeholder' => 'Enter email',
+    'rules' => ['required', 'email'],
+],
+
+'password' => [
+    'element' => 'input', 
+    'type' => 'password',
+    'label' => 'Password',
+],
+
+'number' => [
+    'element' => 'input',
+    'type' => 'number',
+    'label' => 'Age',
+    'min' => 18,
+    'max' => 100,
+],
+```
+
+### Select & Options
+```php path=null start=null
+'country' => [
+    'element' => 'select',
+    'label' => 'Country',
+    'options' => [
+        'us' => 'United States',
+        'ca' => 'Canada', 
+        'uk' => 'United Kingdom',
+    ],
+    'placeholder' => 'Choose country...',
+],
+```
+
+### Checkboxes & Radio
+```php path=null start=null
+'newsletter' => [
+    'element' => 'checkbox',
+    'label' => 'Subscribe to newsletter',
+    'value' => true,
+],
+
+'plan' => [
+    'element' => 'radio-group',
+    'label' => 'Choose Plan',
+    'options' => [
+        'basic' => 'Basic ($9/mo)',
+        'pro' => 'Professional ($19/mo)',
+        'enterprise' => 'Enterprise ($39/mo)',
+    ],
+],
+```
+
+### Textarea
+```php path=null start=null
+'description' => [
+    'element' => 'textarea',
+    'label' => 'Description',
+    'rows' => 6,
+    'placeholder' => 'Describe your needs...',
+],
+```
+
+## 🛠️ Configuration
+
+Customize the package behavior in `config/form.php`:
+
+```php path=/config/form.php start=1
 <?php
 
 return [
-    /**
-     *--------------------------------------------------------------------------
-     * Form Class
-     *--------------------------------------------------------------------------
-     *
-     * This setting specifies the fully qualified class name of the main Form
-     * object used by the package. You can extend the default Form class
-     * to add custom functionality and then update this configuration to use
-     * your custom class.
-     */
-    'form_class' => \Hynek\Form\Form::class,
-
-    /**
-     *--------------------------------------------------------------------------
-     * Default Form Container
-     *--------------------------------------------------------------------------
-     *
-     * This defines the default class used to a form element.
-     * Customize this if you want to use a different container class for your forms.
-     */
-    'default_form_container' => \Hynek\Form\FormContainer::class,
-
-    /**
-     *--------------------------------------------------------------------------
-     * Default Control Container
-     *--------------------------------------------------------------------------
-     *
-     * This setting specifies the default class used to wrap individual form controls
-     * (e.g., input fields, textareas, selects). It often includes elements like
-     * labels, help text, and error messages around the control.
-     * Change this to use a custom control container class.
-     */
-    'default_control_container' => \Hynek\Form\ControlContainer::class,
-
-    /**
-     *--------------------------------------------------------------------------
-     * Default Form Builder
-     *--------------------------------------------------------------------------
-     *
-     * This configuration points to the default class responsible for building
-     * and rendering forms. It's the core component that orchestrates the creation
-     * of form elements and their containers.
-     * You can replace this with your own form builder implementation.
-     */
+    // Default form builder class
     'default_form_builder' => \Hynek\Form\FormBuilder::class,
-
-    /**
-     *--------------------------------------------------------------------------
-     * Default Label Class
-     *--------------------------------------------------------------------------
-     *
-     * This defines the default class used to render labels for form controls.
-     * Customize this if you need to extend or replace the default label functionality.
-     */
-    'default_label' => \Hynek\Form\Label::class,
-
-    /**
-     *--------------------------------------------------------------------------
-     * Default Help Text Class
-     *--------------------------------------------------------------------------
-     *
-     * This setting specifies the default class used to render help text (small,
-     * descriptive text) associated with form controls.
-     * Update this if you have a custom help text implementation.
-     */
-    'default_help_text' => \Hynek\Form\HelpText::class,
-
-    /**
-     *--------------------------------------------------------------------------
-     * Default Error Class
-     *--------------------------------------------------------------------------
-     *
-     * This defines the default class used to render validation error messages
-     * for form controls.
-     * Change this if you want to use a different class for displaying errors.
-     */
-    'default_error' => \Hynek\Form\Error::class,
-
-    /**
-     *--------------------------------------------------------------------------
-     * Elements Collection Class
-     *--------------------------------------------------------------------------
-     *
-     * This configuration specifies the class that represents a collection
-     * of form elements (controls, containers, etc.). It's used internally
-     * to manage and iterate over groups of form components.
-     */
-    'elements_collection' => \Hynek\Form\ElementsCollection::class,
-
-    /**
-     *--------------------------------------------------------------------------
-     * Controls Mapping
-     *--------------------------------------------------------------------------
-     *
-     * This array maps string keys (e.g., 'input', 'textarea') to their
-     * corresponding fully qualified class names for different form controls.
-     * This allows the package to dynamically create instances of these control
-     * classes based on the type requested.
-     * You can extend this array to add custom control types or override
-     * existing ones with your own implementations.
-     */
+    
+    // Control mappings
     'controls' => [
         'input' => \Hynek\Form\Controls\Input::class,
         'textarea' => \Hynek\Form\Controls\TextArea::class,
         'select' => \Hynek\Form\Controls\Select::class,
         'checkbox' => \Hynek\Form\Controls\Checkbox::class,
-        'checkbox-group' => \Hynek\Form\Controls\CheckboxGroup::class,
         'radio' => \Hynek\Form\Controls\Radio::class,
-        'radio-group' => \Hynek\Form\Controls\RadioGroup::class,
         'button' => \Hynek\Form\Controls\Button::class,
+        // Add custom controls here
     ],
-
-    /**
-     *--------------------------------------------------------------------------
-     * View Paths
-     *--------------------------------------------------------------------------
-     *
-     * This array defines the Blade view paths used by the package for rendering
-     * various form components. These views are typically located within the
-     * `resources/views` directory of the package (or your application if
-     * you've published them).
-     * You can override these paths to point to your own custom Blade templates.
-     * The `form::` prefix indicates views from the `hynek-form` package namespace.
-     */
+    
+    // View paths
     'views' => [
         'form' => 'form::form',
-        'form_container' => 'form::form-container',
-        'control_container' => 'form::control-container',
         'input' => 'form::controls.input',
         'textarea' => 'form::controls.textarea',
-        'select' => 'form::controls.select',
-        'checkbox' => 'form::controls.checkbox',
-        'checkbox-group' => 'form::controls.checkbox.group',
-        'radio' => 'form::controls.radio',
-        'radio-group' => 'form::controls.radio.group',
-        'button' => 'form::controls.button',
-        'label' => 'form::label',
-        'help_text' => 'form::help-text',
-        'error' => 'form::error',
+        // Customize view paths
     ],
 ];
-
 ```
 
-## Usage
+## 🔧 Custom Controls
 
-The core of this package revolves around the `FormBuilder` interface, which defines the methods for constructing your forms. You will typically interact with an implementation of this interface to define your forms.
+Create custom form controls:
 
-### Basic Form Creation
+```php path=/app/Forms/Controls/DatePicker.php start=1
+<?php
 
-To create a new form, you would usually instantiate the `FormBuilder` (or its concrete implementation) and chain its methods.
-
-```php
-use Hynek\Form\Contracts\FormBuilder;
-use Hynek\Form\Controls\Input;
-use Hynek\Form\Controls\Textarea;
-use Hynek\Form\Controls\Button;
-
-// Assuming you've resolved the FormBuilder from the service container
-// e.g., via dependency injection or app()->make()
-$form = app(FormBuilder::class)
-    ->action(route('posts.store'))
-    ->method('POST')
-    ->element(
-        (new Input('title'))
-            ->id('post-title')
-            ->label('Post Title')
-            ->placeholder('Enter post title')
-            ->required()
-    )
-    ->element(
-        (new Textarea('content'))
-            ->id('post-content')
-            ->label('Post Content')
-            ->placeholder('Write your post content here')
-            ->rows(5)
-    )
-    ->button('Submit', 'submit'); // Creates a submit button
-
-// To render the form in your Blade view:
-// echo $form->render(); or simply use {{ $form }}
-```
-
-### FormBuilder Methods
-
-The `FormBuilder` interface provides the following methods for building your forms:
-
-#### `addAttribute(string|array $name, ?string $value = null): static`
-Adds HTML attributes to the form element.
-- `$name`: The attribute name (string) or an associative array of attributes.
-- `$value`: The attribute value (if `$name` is a string).
-
-```php
-$form->addAttribute('class', 'my-custom-form');
-$form->addAttribute(['data-foo' => 'bar', 'aria-label' => 'Contact Form']);
-```
-
-#### `removeAttribute(string $name): static`
-Removes an HTML attribute from the form element.
-- `$name`: The name of the attribute to remove.
-
-```php
-$form->removeAttribute('method');
-```
-
-#### `container(ElementContainer $container): static`
-Sets the container for the element. This allows you to wrap your form elements in custom HTML structures.
-- `$container`: An instance of `ElementContainer`.
-
-#### `name(string $name): static`
-Sets the name of the form element. (Useful for the form itself if it's treated as an element).
-- `$name`: The name string.
-
-```php
-$form->name('myForm');
-```
-
-#### `id(string $id): static`
-Sets the HTML `id` attribute of the form element.
-- `$id`: The ID string.
-
-```php
-$form->id('my-form-id');
-```
-
-#### `view(string $view): static`
-Sets a custom Blade view for rendering the element.
-- `$view`: The Blade view path (e.g., `'custom.form.template'`).
-
-```php
-$form->view('my-theme.forms.standard');
-```
-
-#### `getName(): ?string`
-Gets the name of the form element.
-
-#### `getContainer(): ?ElementContainer`
-Gets the container of the form element.
-
-#### `action(string $action): static`
-Sets the `action` attribute for the form.
-- `$action`: The URL where the form data will be submitted.
-
-```php
-$form->action(route('users.store'));
-```
-
-#### `method(string $method): static`
-Sets the `method` attribute for the form (e.g., `POST`, `GET`).
-- `$method`: The HTTP method.
-
-```php
-$form->method('POST');
-```
-
-#### `element(FormElement $element): static`
-Adds a form element (like an input, textarea, or select) to the form.
-- `$element`: An instance of a class implementing `FormElement` (e.g., `Input`, `Textarea`).
-
-```php
-use Hynek\Form\Controls\Input;
-use Hynek\Form\Controls\Select;
-
-$form->element(new Input('username')->label('Username'))
-     ->element(
-         (new Select('role_id'))
-             ->label('User Role')
-             ->options(['1' => 'Admin', '2' => 'Editor'])
-     );
-```
-
-#### `getElements(): ElementsCollection`
-Retrieves a collection of all form elements added to the builder.
-
-#### `getRules(): Collection`
-Retrieves the validation rules associated with the form's elements. (Implementation dependent on how rules are attached to `FormElement` instances).
-
-#### `button(string $text, ?string $type = 'button'): static`
-Adds a button to the form.
-- `$text`: The text displayed on the button.
-- `$type`: The button type (e.g., `'submit'`, `'button'`, `'reset'`). Defaults to `'button'`.
-
-```php
-$form->button('Save Changes', 'submit')
-     ->button('Cancel'); // Defaults to type="button"
-```
-
-#### `getButtons(): ButtonsCollection`
-Retrieves a collection of all buttons added to the form.
-
-#### `enableAjax(): static`
-Enables AJAX/XHR submission for the form. This would typically add a specific attribute or class that your JavaScript can hook into.
-
-```php
-$form->enableAjax();
-```
-
-#### `disableAjax(): static`
-Disables AJAX/XHR submission for the form.
-
-```php
-$form->disableAjax();
-```
-
-#### `livewireSubmit(string $livewireSubmit): static`
-Integrates with Livewire by setting a `wire:submit` attribute on the form.
-- `$livewireSubmit`: The Livewire method to call on form submission (e.g., `'saveUser'`).
-
-```php
-$form->livewireSubmit('savePost');
-```
-
-#### `updateValue($elementName, $value): static`
-Updates the value of a specific form element.
-- `$elementName`: The name of the element whose value is to be updated.
-- `$value`: The new value for the element.
-
-```php
-// After fetching existing data
-$form->updateValue('title', $existingPost->title);
-```
-
-### Rendering Forms
-
-Once you've constructed your form using the `FormBuilder`, you can render it in your Blade templates:
-
-```blade
-<!-- resources/views/posts/create.blade.php -->
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Create New Post
-        </h2>
-    </x-slot>
-
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                {{ $postForm }} {{-- Assuming $postForm is passed from your controller --}}
-            </div>
-        </div>
-    </div>
-</x-app-layout>
-```
-
-In your controller, you would pass the constructed form to the view:
-
-```php
-namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
-use Hynek\Form\Contracts\FormBuilder;
-use Hynek\Form\Controls\Input;
-use Hynek\Form\Controls\Textarea;
-use Hynek\Form\Controls\Button;
-
-class PostController extends Controller
-{
-    public function create(FormBuilder $formBuilder)
-    {
-        $postForm = $formBuilder
-            ->action(route('posts.store'))
-            ->method('POST')
-            ->element(
-                (new Input('title'))
-                    ->label('Post Title')
-                    ->placeholder('Enter post title')
-                    ->required()
-            )
-            ->element(
-                (new Textarea('content'))
-                    ->label('Post Content')
-                    ->placeholder('Write your post content here')
-                    ->rows(5)
-            )
-            ->button('Create Post', 'submit');
-
-        return view('posts.create', compact('postForm'));
-    }
-}
-```
-
-## Extending and Customizing
-
-### Custom Form Controls
-
-You can create your own custom form controls by extending the `Hynek\Form\Controls\Control` class (or any existing control) and implementing the necessary methods. Once created, you can register your custom control in the `config/form.php` file under the `controls` array.
-
-```php
-// app/Forms/Controls/MyCustomControl.php
 namespace App\Forms\Controls;
 
 use Hynek\Form\Controls\FormControl;
-use Hynek\Form\Traits\Renderable;
 
-class MyCustomControl extends FormControl
+class DatePicker extends FormControl
 {
-    use Renderable;
+    protected string $format = 'Y-m-d';
     
-    public function toArray()
+    public function format(string $format): static
     {
-        return [];
+        $this->format = $format;
+        return $this;
+    }
+    
+    public function toArray(): array
+    {
+        return array_merge(parent::toArray(), [
+            'format' => $this->format,
+        ]);
     }
 }
 ```
 
-Then, in `config/form.php`:
+Register in configuration:
 
-```php
-// ...
+```php path=null start=null
+// config/form.php
 'controls' => [
     // ... existing controls
-    'my-custom-control' => \App\Forms\Controls\MyCustomControl::class,
+    'date-picker' => \App\Forms\Controls\DatePicker::class,
 ],
 'views' => [
-    // ... existing views
-    'my-custom-control' => 'my-theme.controls.custom',
+    // ... existing views  
+    'date-picker' => 'forms.controls.date-picker',
 ],
-// ...
 ```
 
-### Custom Views
+## 🧪 Testing
 
-If you've published the package's views, you can directly modify them in `resources/views/vendor/form`. Alternatively, you can create entirely new views and update the `views` array in `config/form.php` to point to your custom templates.
+Run the test suite:
 
-### Custom Containers
+```bash
+composer test
+```
 
-Similar to controls, you can extend `Hynek\Form\FormContainer` or `Hynek\Form\ControlContainer` to create custom wrappers for your forms or individual controls. Then, update the `default_form_container` or `default_control_container` in your `config/form.php`.
-## 3rd-party libraries
-### PHP / Laravel
-- livewire/flux
-### JavaScript
-- Vite
+Run with coverage:
+
+```bash
+composer test-coverage
+```
+
+## 📖 Documentation
+
+For detailed documentation and examples, visit our [documentation site](https://hynek-form.docs) (coming soon).
+
+## 🤝 Contributing
+
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details.
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📝 Changelog
+
+Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
+
+## 🛡️ Security
+
+If you discover any security-related issues, please email security@hynek.dev instead of using the issue tracker.
+
+## 📄 License
+
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+
+## 💫 Credits
+
+- [Henrik Söderlind](https://github.com/henriksoderlind)
+- [All Contributors](../../contributors)
+
+## 🌟 Built With
+
+- **[Laravel](https://laravel.com)** - The PHP Framework for Web Artisans
+- **[Livewire](https://laravel-livewire.com)** - A full-stack framework for Laravel
+- **[HTMX](https://htmx.org)** - High power tools for HTML
+- **[Spatie Laravel Data](https://spatie.be/docs/laravel-data)** - Powerful data objects for Laravel
+- **[Pest](https://pestphp.com)** - An elegant PHP testing framework
