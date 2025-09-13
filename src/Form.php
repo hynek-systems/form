@@ -2,7 +2,7 @@
 
 namespace Hynek\Form;
 
-use Hynek\Core\Traits\HasAttributes;
+use Hynek\Core\Traits\HasPhpAttributes;
 use Hynek\Form\Contracts\FormBuilder;
 use Hynek\Form\Contracts\FormElement;
 use Hynek\Form\Enums\FormMethods;
@@ -18,7 +18,7 @@ use Spatie\LaravelData\Data;
 abstract class Form extends Base implements Contracts\Form
 {
     use AjaxSubmission,
-        HasAttributes,
+        HasPhpAttributes,
         HasView;
 
     protected Collection $fields;
@@ -92,8 +92,11 @@ abstract class Form extends Base implements Contracts\Form
             }
 
             $setMethod = 'set'.ucfirst($prop);
+            $addMethod = 'add'.ucfirst($prop);
             if (method_exists($this, $setMethod)) {
                 $element->$setMethod($value);
+            } elseif (method_exists($this, $addMethod)) {
+                $element->$addMethod($value);
             } elseif (method_exists($element, $prop)) {
                 $element->$prop($value);
             } else {
@@ -129,7 +132,7 @@ abstract class Form extends Base implements Contracts\Form
             $this->view,
             [
                 ...$this->builder->toArray(),
-                'layout' => $this->getAttribute('layout'),
+                ...$this->getAllAttributes(),
             ]
         );
     }
@@ -192,5 +195,12 @@ abstract class Form extends Base implements Contracts\Form
     public function useHtmx(): bool
     {
         return false;
+    }
+
+    public function addAttribute(array|string $name, ?string $value = null): static
+    {
+        $this->builder->addAttribute($name, $value);
+
+        return $this;
     }
 }

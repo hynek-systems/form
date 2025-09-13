@@ -30,4 +30,6 @@ interface Form
     public function useHtmx(): bool;
 
     public function title(): ?string;
+
+    public function addAttribute(string|array $name, ?string $value = null): static;
 }

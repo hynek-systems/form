@@ -9,13 +9,19 @@
     'name' => null,
     'title' => null,
     'layout' => null,
+    'controls_layout' => 'grid'
 ])
 @php
+    $classes = Flux::classes('grid gap-6')
+        ->add(match ($controls_layout) {
+            'grid' => 'grid-cols-1 md:grid-cols-2',
+            default => 'grid-cols-1'
+        });
     $attributes = $attributes->merge([
         ...$_attributes,
         'id' => $id,
         'name' => $name,
-    ])->class('grid gap-10 grid-cols-1 md:grid-cols-2');
+    ])->class($classes);
     $usesHtmx = $attributes->has('hx-post') || $attributes->has('hx-get') || $attributes->has('hx-put') || $attributes->has('hx-patch') || $attributes->has('hx-delete');
 @endphp
 <x-dynamic-component :component="$layout ?? 'layouts.blank'">

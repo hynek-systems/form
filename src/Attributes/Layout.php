@@ -1,6 +1,6 @@
 <?php
 
-namespace Hynek\Form;
+namespace Hynek\Form\Attributes;
 
 use Attribute;
 use Hynek\Core\View\Layouts;
