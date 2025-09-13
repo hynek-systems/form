@@ -10,6 +10,10 @@ trait HasName
     {
         $this->name = $name;
 
+        if (method_exists($this, 'id')) {
+            $this->id($name);
+        }
+
         return $this;
     }
 

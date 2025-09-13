@@ -54,6 +54,8 @@ abstract class Form extends Base implements Contracts\Form
         $this->fields = collect($this->fields());
         $this->buttons = collect($this->buttons());
         $this->builder = app(FormBuilder::class);
+        $formName = Str::snake(class_basename($this));
+        $this->builder->name($formName);
         $this->bootForm();
         $this->view('form::form');
     }
