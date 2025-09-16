@@ -8,16 +8,20 @@ use Illuminate\Foundation\Http\FormRequest as LaravelFormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Mauricius\LaravelHtmx\Http\HtmxRequest;
 
-class FormRequest extends LaravelFormRequest
+abstract class FormRequest extends LaravelFormRequest
 {
-    protected Form $form;
+    protected Form|string|null $form = null;
 
     protected function failedValidation(Validator $validator)
     {
         if (app(HtmxRequest::class)->isHtmxRequest()) {
+            // Get the form instance - either from property or registry
+            $form = $this->form instanceof Form
+                ? $this->form
+                : app(FormRegistry::class)->get($this->form);
+
             $response = response(
-                $this->form->renderFragment(
-                    $this->form->getName(),
+                $form->withoutLayout()->render(
                     [
                         'errors' => $validator->errors(),
                         'old' => $this->all(),

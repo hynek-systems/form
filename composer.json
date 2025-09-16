@@ -6,6 +6,7 @@
         "laravel",
         "module"
     ],
+    "version": "dev-main",
     "license": "MIT",
     "authors": [
         {
@@ -21,11 +22,19 @@
             "options": {
                 "symlink": true
             }
+        },
+        {
+            "type": "path",
+            "url": "../hynek-core",
+            "options": {
+                "symlink": true
+            }
         }
     ],
     "require": {
         "php": "^8.2",
-        "hynek/hynek-laravel-to-zod": "^1.0",
+        "hynek/hynek-core": "dev-main",
+        "hynek/hynek-laravel-to-zod": "dev-main",
         "hynek/hynek-macro": "dev-main",
         "hynek/hynek-module-tools": "dev-main",
         "livewire/flux": "^2.2",

@@ -140,13 +140,16 @@ abstract class Form extends Base implements Contracts\Form
     /**
      * @throws \Throwable
      */
-    public function render(): View
+    public function render(?array $data = []): View
     {
         $this->beforeRender();
 
         return view(
             $this->view,
-            $this->viewData()
+            [
+                ...$this->viewData(),
+                ...$data
+            ]
         );
     }
 
@@ -239,5 +242,14 @@ abstract class Form extends Base implements Contracts\Form
     public function getView(): string
     {
         return $this->builder->getView();
+    }
+
+    public function withoutLayout(): static
+    {
+        if (isset($this->php_attributes['layout'])) {
+            unset($this->php_attributes['layout']);
+        }
+
+        return $this;
     }
 }

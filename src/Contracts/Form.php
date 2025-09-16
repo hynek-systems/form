@@ -11,7 +11,7 @@ interface Form
 
     public function buttons(): array;
 
-    public function render(): View;
+    public function render(?array $data = []): View;
 
     public function renderFragment(string $fragment, ?array $data = []): string;
 
@@ -38,4 +38,6 @@ interface Form
     public function getName(): string;
 
     public function getView();
+
+    public function withoutLayout(): static;
 }

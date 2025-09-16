@@ -13,7 +13,7 @@ trait HasOptions
         $this->options = collect();
     }
 
-    public function option(string|array|callable $text, array|string|null $value = null, ?bool $disabled = false): static
+    public function option(string|array|callable|Collection $text, array|string|null $value = null, ?bool $disabled = false): static
     {
         if (is_array($text)) {
             foreach ($text as $val => $option) {
@@ -25,6 +25,8 @@ trait HasOptions
             }
         } elseif (is_callable($text)) {
             $this->options->push(call_user_func($text));
+        } elseif ($text instanceof Collection) {
+            $this->options = $this->options->merge($text->toArray());
         } else {
             $this->options->push([
                 'text' => $text,

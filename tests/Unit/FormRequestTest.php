@@ -1,13 +1,42 @@
 <?php
 
 use Hynek\Form\Contracts\Form;
+use Hynek\Form\Form as FormClass;
+use Hynek\Form\FormRegistry;
 use Hynek\Form\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\MessageBag;
 use Mauricius\LaravelHtmx\Http\HtmxRequest;
 
 beforeEach(function () {
+    $this->form = new class extends FormClass {
+        protected function bootForm(): void {}
+
+        public function buttons(): array
+        {
+            return [
+                ['text' => 'Submit', 'type' => 'submit,']
+            ];
+        }
+
+        public function fields(): array
+        {
+            return [
+                'name' => ['element' => 'input'],
+                'email' => ['element' => 'input']
+            ];
+        }
+
+        public function title(): ?string
+        {
+            return 'My form';
+        }
+    };
+
+    app(FormRegistry::class)->register('my-form', get_class($this->form));
+
     $this->formRequest = new class extends FormRequest {
         protected function rules()
         {
@@ -16,7 +45,7 @@ beforeEach(function () {
                 'email' => 'required|email',
             ];
         }
-        
+
         protected function authorize()
         {
             return true;
@@ -37,13 +66,18 @@ test('failed validation throws http response exception for htmx requests', funct
     // Mock the Form
     $formMock = \Mockery::mock(Form::class);
     $formMock->shouldReceive('getName')->andReturn('test_form');
-    $formMock->shouldReceive('renderFragment')
-        ->with('test_form', \Mockery::on(function ($data) {
+    $formMock->shouldReceive('withoutLayout')->andReturnSelf();
+    // Mock a View object
+    $viewMock = \Mockery::mock(View::class);
+    $viewMock->shouldReceive('render')->andReturn('<div>Form with errors</div>');
+    
+    $formMock->shouldReceive('render')
+        ->with(\Mockery::on(function ($data) {
             return isset($data['errors']) && isset($data['old']) &&
                    $data['errors'] instanceof MessageBag &&
                    is_array($data['old']);
         }))
-        ->andReturn('<div>Form with errors</div>');
+        ->andReturn($viewMock);
 
     // Set the form property using reflection
     $reflection = new \ReflectionClass($this->formRequest);
@@ -77,17 +111,22 @@ test('failed validation calls parent method for non-htmx requests', function () 
     // Create a custom FormRequest that tracks parent method calls
     $formRequest = new class extends FormRequest {
         public $parentFailedValidationCalled = false;
-        
+
         protected function rules()
         {
             return ['name' => 'required'];
         }
-        
+
         protected function authorize()
         {
             return true;
         }
-        
+
+        protected function getFormName(): string
+        {
+            return 'test-form';
+        }
+
         protected function failedValidation(Validator $validator)
         {
             try {
@@ -128,9 +167,15 @@ test('failed validation for htmx request returns correct response content', func
     $expectedFragmentContent = '<div class="form-errors">Validation failed</div>';
     $formMock = \Mockery::mock(Form::class);
     $formMock->shouldReceive('getName')->andReturn('test_form');
-    $formMock->shouldReceive('renderFragment')
-        ->with('test_form', \Mockery::type('array'))
-        ->andReturn($expectedFragmentContent);
+    $formMock->shouldReceive('withoutLayout')->andReturnSelf();
+    
+    // Mock a View object
+    $viewMock = \Mockery::mock(View::class);
+    $viewMock->shouldReceive('render')->andReturn($expectedFragmentContent);
+    
+    $formMock->shouldReceive('render')
+        ->with(\Mockery::type('array'))
+        ->andReturn($viewMock);
 
     // Set the form property
     $reflection = new \ReflectionClass($this->formRequest);
@@ -160,7 +205,7 @@ test('failed validation for htmx request returns correct response content', func
     }
 });
 
-test('form request passes form data to renderFragment correctly', function () {
+test('form request passes form data to render correctly', function () {
     // Mock the HtmxRequest
     $htmxRequestMock = \Mockery::mock(HtmxRequest::class);
     $htmxRequestMock->shouldReceive('isHtmxRequest')->andReturn(true);
@@ -169,17 +214,22 @@ test('form request passes form data to renderFragment correctly', function () {
     // Mock the Form with specific expectations
     $formMock = \Mockery::mock(Form::class);
     $formMock->shouldReceive('getName')->andReturn('user_form');
-    
+    $formMock->shouldReceive('withoutLayout')->andReturnSelf();
+
     $requestData = ['name' => 'John', 'email' => 'invalid'];
     $errorBag = new MessageBag(['email' => 'Invalid email format']);
+
+    // Mock a View object
+    $viewMock = \Mockery::mock(View::class);
+    $viewMock->shouldReceive('render')->andReturn('<div>Form content</div>');
     
-    $formMock->shouldReceive('renderFragment')
-        ->with('user_form', [
+    $formMock->shouldReceive('render')
+        ->with([
             'errors' => $errorBag,
             'old' => $requestData,
         ])
         ->once()
-        ->andReturn('<div>Form content</div>');
+        ->andReturn($viewMock);
 
     // Set the form property
     $reflection = new \ReflectionClass($this->formRequest);
@@ -205,28 +255,33 @@ test('form request passes form data to renderFragment correctly', function () {
 
 test('form request can be instantiated with form property', function () {
     $formMock = \Mockery::mock(Form::class);
-    
+
     $formRequest = new class extends FormRequest {
         public function setForm($form) {
             $this->form = $form;
         }
-        
+
         protected function rules() {
             return ['name' => 'required'];
         }
-        
+
         protected function authorize() {
             return true;
         }
+
+        protected function getFormName(): string
+        {
+            return 'test-form';
+        }
     };
-    
+
     $formRequest->setForm($formMock);
-    
+
     // Use reflection to check the form property
     $reflection = new \ReflectionClass($formRequest);
     $formProperty = $reflection->getProperty('form');
     $formProperty->setAccessible(true);
-    
+
     expect($formProperty->getValue($formRequest))->toBe($formMock);
 });
 
