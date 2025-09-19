@@ -26,8 +26,7 @@ class TextArea extends FormControl
 
     public static function make(string $name): static
     {
-        return (new static)
-            ->name($name)
+        return (new static($name))
             ->id($name)
             ->container(app(ElementContainer::class));
     }

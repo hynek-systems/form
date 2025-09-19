@@ -33,7 +33,7 @@
         @if(!is_null($prefix))
             <flux:input.group.prefix>{{ $prefix }}</flux:input.group.prefix>
         @endif
-        <flux:input :$id :$attributes :$name :$type :$placeholder />
+        <flux:input :$id :$attributes :$name :$type :$placeholder :$value />
         @if(!is_null($suffix))
             <flux:input.group.suffix>{{ $suffix }}</flux:input.group.suffix>
         @endif
