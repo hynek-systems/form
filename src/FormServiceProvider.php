@@ -16,6 +16,7 @@ class FormServiceProvider extends HynekModuleToolsServiceProvider
     {
         $package->name('hynek-form')
             ->hasConfigFile()
+            ->hasRoute('form')
             ->hasViews()
             ->hasAssets()
             ->hasCommands(

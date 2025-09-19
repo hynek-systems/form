@@ -4,9 +4,9 @@
   "description": "A simple form state manager",
   "main": "resources/js/index.js",
   "scripts": {
-      "dev": "vite",
-      "build": "vite build",
-      "watch": "vite build --watch"
+    "dev": "vite",
+    "build": "vite build",
+    "watch": "vite build --watch"
   },
   "repository": {
     "type": "git",
@@ -22,5 +22,8 @@
   "homepage": "https://github.com/hynek-systems/form#readme",
   "devDependencies": {
     "vite": "^7.1.4"
+  },
+  "dependencies": {
+    "filepond": "^4.32.9"
   }
 }

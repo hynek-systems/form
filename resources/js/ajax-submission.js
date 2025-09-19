@@ -47,5 +47,3 @@ window.Hynek.AjaxSubmission = class {
         this.formState.emit('form:submit:end', result)
     }
 }
-
-export default AjaxSubmission;

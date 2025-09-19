@@ -104,5 +104,3 @@ window.Hynek.FormStatus = class {
         }
     }
 }
-
-export default FormStatus

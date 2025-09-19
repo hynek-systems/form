@@ -1,5 +1,7 @@
-import Formstatus from "./formstatus.js";
-import AjaxSubmission from "./ajax-submission.js";
+import "./formstatus.js";
+import "./ajax-submission.js";
+import * as FilePond from 'filepond';
+import 'filepond/dist/filepond.min.css';
 
-export {Formstatus, AjaxSubmission}
+window.FilePond = FilePond;
 
