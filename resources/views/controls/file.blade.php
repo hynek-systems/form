@@ -77,6 +77,7 @@ if (!is_null($error)) {
             dropOnPage: @js($dropOnPage),
             dropOnElement: @js($dropOnElement),
             dropValidation: @js($dropValidation),
+            acceptedFileTypes: @js($acceptedFileTypes),
             server: {
                 process: @js($uploadUrl),
                 revert: @js($revertUrl),

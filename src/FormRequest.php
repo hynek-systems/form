@@ -12,13 +12,28 @@ abstract class FormRequest extends LaravelFormRequest
 {
     protected Form|string|null $form = null;
 
+    public function getForm(): Form|string|null
+    {
+        return $this->form;
+    }
+
+    protected function resolveForm(): Form
+    {
+        return $this->form instanceof Form
+            ? $this->form
+            : app(FormRegistry::class)->get($this->form);
+    }
+
+    public function rules(): array
+    {
+        return $this->resolveForm()->getBuilder()->getRules()->toArray();
+    }
+
     protected function failedValidation(Validator $validator)
     {
         if (app(HtmxRequest::class)->isHtmxRequest()) {
             // Get the form instance - either from property or registry
-            $form = $this->form instanceof Form
-                ? $this->form
-                : app(FormRegistry::class)->get($this->form);
+            $form = $this->resolveForm();
 
             $response = response(
                 $form->withoutLayout()->render(

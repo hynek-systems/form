@@ -6,6 +6,7 @@ namespace Hynek\Form\Http\Controllers;
 use Hynek\Core\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use RuntimeException;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -86,7 +87,7 @@ class UploadController
 
     protected function basePath(): string
     {
-        $tempDir = storage_path('app/tmp');
+        $tempDir = Storage::disk('tmp')->path('');
 
         if (! is_dir($tempDir)) {
             if (! mkdir($tempDir, 0777, true) && !is_dir($tempDir)) {

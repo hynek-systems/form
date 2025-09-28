@@ -112,6 +112,8 @@ return [
         'radio-group' => \Hynek\Form\Controls\RadioGroup::class,
         'button' => \Hynek\Form\Controls\Button::class,
         'file' => \Hynek\Form\Controls\File::class,
+        'code' => \Hynek\Form\Controls\CodeEditor::class,
+        'editor' => \Hynek\Form\Controls\Editor::class,
     ],
 
     /**
@@ -142,6 +144,8 @@ return [
         'help_text' => 'form::help-text',
         'error' => 'form::error',
         'file' => 'form::controls.file',
+        'code' => 'form::controls.code',
+        'editor' => 'form::controls.editor',
     ],
 
     /*

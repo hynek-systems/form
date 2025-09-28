@@ -8,6 +8,7 @@ use Hynek\Form\Contracts\FormElement;
 use Hynek\Form\Enums\FormMethods;
 use Hynek\Form\Traits\AjaxSubmission;
 use Hynek\Form\Traits\HasView;
+use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
@@ -15,8 +16,9 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Mauricius\LaravelHtmx\View\BladeFragment;
 use Spatie\LaravelData\Data;
+use function Termwind\render;
 
-abstract class Form extends Base implements Contracts\Form
+abstract class Form extends Base implements Contracts\Form, Responsable
 {
     use AjaxSubmission,
         HasPhpAttributes,
@@ -251,5 +253,15 @@ abstract class Form extends Base implements Contracts\Form
         }
 
         return $this;
+    }
+
+    public function toResponse($request)
+    {
+        return $this->render();
+    }
+
+    public function __invoke()
+    {
+        return $this->render();
     }
 }

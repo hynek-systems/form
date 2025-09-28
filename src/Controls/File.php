@@ -447,6 +447,7 @@ class File extends FormControl
             ['chunkUploads' => $this->chunkUploads],
             ['chunkSize' => $this->chunkSize],
             ['chunkRetryDelays' => $this->chunkRetryDelays],
+            ['acceptedFileTypes' => $this->acceptedFileTypes],
         ];
     }
 }
